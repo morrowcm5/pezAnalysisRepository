@@ -8,7 +8,7 @@ end
 % installVideoUtils
 %%%%% computer and directory variables and information
 op_sys = system_dependent('getos');
-if strfind(op_sys,'Microsoft Windows 7')
+if contains(op_sys,'Microsoft Windows')
 %    archDir = [filesep filesep 'tier2' filesep 'card'];
 
     archDir = [filesep filesep 'dm11' filesep 'cardlab'];
@@ -63,7 +63,12 @@ if downloadOpRestrictedTest
         outcome = 'Supplement does not exist';
         return
     end
-    vidObj = VideoReader(vidSuppPath);
+    try
+        vidObj = VideoReader(vidSuppPath);
+    catch
+        outcome = 'Supplement does not exist';
+        return
+    end
     suppFrmCt = vidObj.NumberOfFrames;
     suppTargetCt = numel(vidStats.supplement_frame_reference{videoID});
     if suppFrmCt ~= suppTargetCt

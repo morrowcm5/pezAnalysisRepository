@@ -1,16 +1,17 @@
 function pez3000_dailyFun_v2
-
-[~,result] = system('tasklist /FI "imagename eq matlab.exe" /fo table /nh');
-p = gcp('nocreate');
-if isempty(p)
-    poolsize = 0;
-else
-    poolsize = p.NumWorkers;
-end
-
-if numel(strfind(result,'MATLAB')) > (poolsize+1)
-    exit
-end
+% 
+clear all
+% [~,result] = system('tasklist /FI "imagename eq matlab.exe" /fo table /nh');
+% p = gcp('nocreate');
+% if isempty(p)
+%     poolsize = 0;
+% else
+%     poolsize = p.NumWorkers;
+% end
+% 
+% if numel(strfind(result,'MATLAB')) > (poolsize+1)
+%     exit
+% end
 
 [~,localUserName] = dos('echo %USERNAME%');
 localUserName = localUserName(1:end-1);
@@ -28,8 +29,9 @@ disp('Raw data prep')
 pez3000_rawDataPrep
 
 %minimum_collectionID = '0095';
-%  minimum_collectionID = '0108';
-minimum_collectionID = '0200';
+  %minimum_collectionID = '0108';
+% minimum_collectionID = '0221';
+minimum_collectionID = '0242';
 
 disp('Takeoff analysis')
 takeoffAnalysis3000_v2(1,[],minimum_collectionID)
@@ -41,4 +43,7 @@ disp('Finishing tasks')
 pez3000_posthoc_corrections
 makeExcelTable_v2
 
-exit
+disp('Updating APT Tracking List')
+vids2track_APT
+
+%exit

@@ -36,13 +36,13 @@ addpath(fullfile(repositoryDir,'Pez3000_Gui_folder','Matlab_functions','Support_
 dateFolders = dir(fullfile(parentDir,'20*'));
 dateFolders = sort({dateFolders(:).name});
 %%%%%%%%%%%%%%%%%%%%%%%%%
-startFlag = 1;
+startFlag = 2;
 %%%%%%%%%%%%%%%%%%%%%%%%%
 if startFlag == 2
     lastDate = load(fullfile(housekeepingDir,'lastDateAssessed_curator.mat'));
     datanameLoad = fieldnames(lastDate);
     lastDateAssessed = lastDate.(datanameLoad{1});
-%     lastDateAssessed = '20180501';%%%%%%%%%%%%%%%%%%%%%%%%
+ %    lastDateAssessed = '20220203';%%%%%%%%%%%%%%%%%%%%%%%%
     beginRef = find(strcmp(dateFolders,lastDateAssessed));
     if beginRef < 1, beginRef = 1; end
 else
@@ -232,6 +232,7 @@ else
     exptInfo4photo = parse_expid_v2(exptID);
 end
 exptInfo.Photo_Activation{1} = exptInfo4photo.Photo_Activation{1};
+
 if strcmp('Alternating',exptInfo.Photo_Activation{1})
     exptInfo.Photo_Activation = {{'pulse_General_widthBegin1000_widthEnd1000_cycles1_intensity20';
         'pulse_General_widthBegin5_widthEnd150_cycles5_intensity30'}};
@@ -240,7 +241,7 @@ activationStrCell = exptInfo.Photo_Activation{1};
 if ischar(activationStrCell)
     activationStrCell = {activationStrCell};
 end
-if ~strcmp('None',activationStrCell{1})
+if ~strcmp('None',activationStrCell{1}) && ~contains(activationStrCell{1},'intensity0')
     photoStimTest = true;
 else
     photoStimTest = false;
@@ -382,7 +383,11 @@ if exist(assessmentPath,'file') == 2
         return
     end
     dataname = fieldnames(assessTable_import);
+    try
     assessTable_import = assessTable_import.(dataname{1});
+    catch
+        keyboard
+    end
     if ~isempty(assessTable_import)
         if ~ismember('APT_Tracking', assessTable_import.Properties.VariableNames) %if APT columns haven't been added yet, add them
             assessTable_import.APT_Tracking = ones(height(assessTable_import),1); %default 1, add to tracking list - not yet tracked
@@ -400,17 +405,20 @@ if exist(assessmentPath,'file') == 2
             numel(newVidList),1);
         
         assessTable2Append.APT_Tracking = ones(height(assessTable2Append),1); %flags all new vids to be tracked by APT
+        assessTable2Append.APT_RetrackFlag = zeros(height(assessTable2Append),1);
         
         try
             assessTable = [assessTable_import;assessTable2Append];
         catch
-            error('table append error')
+            warning('table append error')
         end
     end
+else
+    assessTable.APT_Tracking = ones(height(assessTable),1); %flags all new vids to be tracked by APT
+    assessTable.APT_RetrackFlag = zeros(height(assessTable),1); %default 0, no retrack
 end
 assessTable.Video_Path(videoList) = cellfun(@(x) fullfile(runPath,x),...
     videoListExt,'uniformoutput',false);
-
 
 autoVarNames = {'jumpTest','jumpScore','autoFrameOfTakeoff'};
 automatedAnnotations = cell2table(cell(numel(videoList),numel(autoVarNames)),...

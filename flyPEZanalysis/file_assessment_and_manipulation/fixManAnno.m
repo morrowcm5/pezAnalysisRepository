@@ -3,10 +3,15 @@ function manualAnnotations = fixManAnno(manualAnnotations,videoStatisticsMerged)
 
 videoList = manualAnnotations.Properties.RowNames;
 vars2check = {'frame_of_wing_movement','frame_of_leg_push','wing_down_stroke','frame_of_take_off'};
-for iterV = 1:numel(videoList);
+for iterV = 1:numel(videoList)
     videoID = videoList{iterV};
     frameRefcutrate = double(videoStatisticsMerged.cutrate10th_frame_reference{videoID});
     frameReffullrate = double(videoStatisticsMerged.supplement_frame_reference{videoID});
+    
+    if isempty(frameRefcutrate)&& isempty(frameReffullrate)
+        frameRefcutrate = 1:videoStatisticsMerged.frame_count(videoID);
+        frameReffullrate = 1:videoStatisticsMerged.frame_count(videoID).*10;
+    end
     
     Y = (1:numel(frameRefcutrate));
     xi = (1:numel(frameRefcutrate)*10);

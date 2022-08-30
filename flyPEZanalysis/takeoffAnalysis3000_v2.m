@@ -53,7 +53,8 @@ if ~exist('exptIDlist','var') || isempty(exptIDlist)
     exptIDlist = flipud(exptIDlist(:));
 end
 
-exptIDlist = exptIDlist(cellfun(@(x) str2double(x(1:4)) >= str2double(minimum_collectionID),exptIDlist));
+%exptIDlist = exptIDlist(cellfun(@(x) str2double(x(1:4)) >= str2double(minimum_collectionID) & str2double(x(1:4)) < 233 ,exptIDlist)); %Tess, change this back
+ exptIDlist = exptIDlist(cellfun(@(x) str2double(x(1:4)) >= str2double(minimum_collectionID),exptIDlist));
 %exptIDlist = exptIDlist(cellfun(@(x) str2double(x(1:4)) == 98,exptIDlist));
 %exptIDlist = exptIDlist(cellfun(@(x) str2double(x) == 92000004300673,exptIDlist));
 exptCt = numel(exptIDlist);

@@ -37,7 +37,9 @@ end
 exptCt = numel(exptIDlist);
 %%
 exptSumName = 'experimentSummary.mat';
+exptSumBU = 'experimentSummary_backup.mat';
 exptSumPath = fullfile(analysisDir,exptSumName);
+exptSumPathBU = fullfile(analysisDir,exptSumBU);
 exptTableCell = exptIDlist;
 if exist(exptSumPath,'file') && nargin == 1
     for iterLoad = 1:5
@@ -56,7 +58,7 @@ if exist(exptSumPath,'file') && nargin == 1
             break
         catch
             if iterLoad == 5
-                error('loading failure')
+                error('loading failure: experiment summary file is corrupted')
             end
             pause(1)
         end
@@ -84,7 +86,8 @@ end
 
 experimentSummary = cat(1,exptTableCell{:});
 experimentSummary = cat(1,experimentSummary_import,experimentSummary); %#ok<NASGU>
-save(exptSumPath,'experimentSummary')
+save(exptSumPath,'experimentSummary','-v7.3')
+save(exptSumPathBU,'experimentSummary','-v7.3')
 
 
 end
