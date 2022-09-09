@@ -7,26 +7,13 @@ function pez3000_statusAssessment_v2(exptIDlist)
 %   experiment IDs found in the analysis directory are assessed.
 
 %% %%% computer and directory variables and information
-op_sys = system_dependent('getos');
-if contains(op_sys,'Microsoft Windows')
-    %    archDir = [filesep filesep 'tier2' filesep 'card'];
-    archDir = [filesep filesep 'dm11' filesep 'cardlab'];
-    dm11Dir = [filesep filesep 'dm11' filesep 'cardlab'];
-else
-    %    archDir = [filesep 'Volumes' filesep 'card'];
-    archDir = [filesep 'Volumes' filesep 'cardlab'];
-    if ~exist(archDir,'file')
-        archDir = [filesep 'Volumes' filesep 'card-1'];
-    end
-    dm11Dir = [filesep 'Volumes' filesep 'cardlab'];
-end
-if ~exist(archDir,'file')
-    error('Archive access failure')
-end
-if ~exist(dm11Dir,'file')
-    error('dm11 access failure')
-end
-analysisDir = fullfile(archDir,'Data_pez3000_analyzed');
+[~,localUserName] = dos('echo %USERNAME%');
+localUserName = localUserName(1:end-1);
+repositoryName = 'pezAnalysisRepository';
+repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
+fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
+
+analysisDir = fullfile(fileDir,'Data_pez3000_analyzed');
 if ~exist('exptIDlist','var')
     exptIDlist = dir(analysisDir);
     exptIDexist = cell2mat({exptIDlist(:).isdir});

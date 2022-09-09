@@ -7,7 +7,14 @@ function makeExcelTable_v2(runMode)
 if ~exist('runMode','var')
     runMode = 1;
 end
-analysisDir = fullfile('\\dm11','cardlab','Data_pez3000_analyzed');
+
+[~,localUserName] = dos('echo %USERNAME%');
+localUserName = localUserName(1:end-1);
+repositoryName = 'pezAnalysisRepository';
+repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
+fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
+
+analysisDir = fullfile(fileDir,'Data_pez3000_analyzed');
 exptSumName = 'experimentSummary.mat';
 exptSumPath = fullfile(analysisDir,exptSumName);
 experimentSummary = load(exptSumPath);
@@ -17,7 +24,7 @@ if runMode == 1
     sheetName = 'allIDs';
     excelPath = fullfile(analysisDir,'experimentIDinfo.xlsx');
 else
-    optionsPath = 'Z:\Data_pez3000_analyzed\WRW_graphing_variables\graphOptions.mat';
+    optionsPath = fullfile(fileDir,'Data_pez3000_analyzed\WRW_graphing_variables\graphOptions.mat');
     graphOptions = load(optionsPath);
     graphOptions = graphOptions.graphOptions;
     excelPath = graphOptions.excelPath;

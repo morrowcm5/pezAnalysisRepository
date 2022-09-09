@@ -13,12 +13,14 @@ if numel(experiment_id) ~= 16
     return
 end
 
-op_sys = system_dependent('getos');
-if contains(op_sys,'Microsoft Windows')
-    file_dir = '\\DM11\cardlab\Pez3000_Gui_folder\Gui_saved_variables';
-else
-    file_dir = '/Volumes/cardlab/Pez3000_Gui_folder/Gui_saved_variables';
-end
+[~,localUserName] = dos('echo %USERNAME%');
+localUserName = localUserName(1:end-1);
+repositoryName = 'pezAnalysisRepository';
+repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
+fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
+
+file_dir = fullfile(fileDir,'Pez3000_Gui_folder','Gui_saved_variables');
+
 
 if isempty(Collection)
     Collection = load([file_dir filesep 'Saved_Collection.mat']);

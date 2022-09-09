@@ -22,28 +22,14 @@ for k = 1:length(v)
 end
 
 %%%%% computer and directory variables and information
-op_sys = system_dependent('getos');
-%if strfind(op_sys,'Microsoft Windows 7')
-if contains(op_sys,'Microsoft Windows')
-%    archDir = [filesep filesep 'tier2' filesep 'card'];
-    archDir = [filesep filesep 'dm11' filesep 'cardlab'];
-    dm11Dir = [filesep filesep 'dm11' filesep 'cardlab'];
-else
-%    archDir = [filesep 'Volumes' filesep 'card'];
-    archDir = [filesep 'Volumes' filesep 'cardlab'];
-    if ~exist(archDir,'file')
-        archDir = [filesep 'Volumes' filesep 'card-1'];
-    end
-    dm11Dir = [filesep 'Volumes' filesep 'cardlab'];
-end
-if ~exist(archDir,'file')
-    error('Archive access failure')
-end
-if ~exist(dm11Dir,'file')
-    error('dm11 access failure')
-end
-analysisDir = fullfile(archDir,'Data_pez3000_analyzed');
-SVMModel = load(fullfile(dm11Dir,'pez3000_variables\analysisVariables\jumpTestSVM_v2.mat'));
+[~,localUserName] = dos('echo %USERNAME%');
+localUserName = localUserName(1:end-1);
+repositoryName = 'pezAnalysisRepository';
+repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
+fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
+
+analysisDir = fullfile(fileDir,'Data_pez3000_analyzed');
+SVMModel = load(fullfile(fileDir,'pez3000_variables\analysisVariables\jumpTestSVM_v2.mat'));
 SVMModel = SVMModel.SVMModel;
 if ~exist('exptIDlist','var') || isempty(exptIDlist)
     exptIDlist = dir(analysisDir);
@@ -53,10 +39,7 @@ if ~exist('exptIDlist','var') || isempty(exptIDlist)
     exptIDlist = flipud(exptIDlist(:));
 end
 
-%exptIDlist = exptIDlist(cellfun(@(x) str2double(x(1:4)) >= str2double(minimum_collectionID) & str2double(x(1:4)) < 233 ,exptIDlist)); %Tess, change this back
- exptIDlist = exptIDlist(cellfun(@(x) str2double(x(1:4)) >= str2double(minimum_collectionID),exptIDlist));
-%exptIDlist = exptIDlist(cellfun(@(x) str2double(x(1:4)) == 98,exptIDlist));
-%exptIDlist = exptIDlist(cellfun(@(x) str2double(x) == 92000004300673,exptIDlist));
+exptIDlist = exptIDlist(cellfun(@(x) str2double(x(1:4)) >= str2double(minimum_collectionID),exptIDlist));
 exptCt = numel(exptIDlist);
 %%
 assessmentTag = '_rawDataAssessment.mat';
@@ -131,7 +114,7 @@ for iterE = 1:exptCt
         strPts = strsplit(videoID,'_');
         runID = [strPts{1} '_' strPts{2} '_' strPts{3}];
         dateID = strPts{3};
-        vidPath = fullfile(archDir,'Data_pez3000',dateID,runID,[videoID '.mp4']);
+        vidPath = fullfile(fileDir,'Data_pez3000',dateID,runID,[videoID '.mp4']);
         if isempty(vidPath)
             disp('vidPath empty')
             continue

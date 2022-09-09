@@ -4,35 +4,22 @@ function pez3000_rawDataPrep
 %   variables needed for curation and analysis
 
 %%%%% computer and directory variables and information
-op_sys = system_dependent('getos');
-if contains(op_sys,'Microsoft Windows')
-    archDir = [filesep filesep 'dm11' filesep 'cardlab'];
-    dm11Dir = [filesep filesep 'dm11' filesep 'cardlab'];
-else
-    archDir = [filesep 'Volumes' filesep 'cardlab'];
-    if ~exist(archDir,'file')
-        archDir = [filesep 'Volumes' filesep 'card-1'];
-    end
-    dm11Dir = [filesep 'Volumes' filesep 'cardlab'];
-end
-if ~exist(archDir,'file')
-    error('Archive access failure')
-end
-if ~exist(dm11Dir,'file')
-    error('dm11 access failure')
-end
-parentDir = fullfile(archDir,'Data_pez3000');
-housekeepingDir = fullfile(dm11Dir,'Pez3000_Gui_folder','defaults_and_housekeeping_variables');
-analysisDir = fullfile(archDir,'Data_pez3000_analyzed');
 [~,localUserName] = dos('echo %USERNAME%');
 localUserName = localUserName(1:end-1);
 repositoryName = 'pezAnalysisRepository';
 repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
-subfun_dir = fullfile(repositoryDir,'pezProc_subfunctions');
-saved_var_dir = fullfile(repositoryDir,'pezProc_saved_variables');
-assessment_dir = fullfile(repositoryDir,'file_assessment_and_manipulation');
+fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
+parentDir = fullfile(fileDir,'Data_pez3000');
+housekeepingDir = fullfile(fileDir,'Pez3000_Gui_folder','defaults_and_housekeeping_variables');
+analysisDir = fullfile(fileDir,'Data_pez3000_analyzed');
+
+subfun_dir = fullfile(repositoryDir,'flyPEZanalysis','pezProc_subfunctions');
+saved_var_dir = fullfile(repositoryDir,'flyPEZanalysis','pezProc_saved_variables');
+assessment_dir = fullfile(repositoryDir,'flyPEZanalysis','file_assessment_and_manipulation');
 addpath(repositoryDir,subfun_dir,saved_var_dir,assessment_dir)
-addpath(fullfile(repositoryDir,'Pez3000_Gui_folder','Matlab_functions','Support_Programs'))
+addpath(fullfile(repositoryDir,'flyPEZsetup','Matlab_functions','Support_Programs'))
+addpath(fullfile(repositoryDir,'flyPEZanalysis','graphing_and_visualization'))
+
 dateFolders = dir(fullfile(parentDir,'20*'));
 dateFolders = sort({dateFolders(:).name});
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -82,45 +69,20 @@ end
 end
 
 function makeDataVars(runName,datePath)
-
-
-if nargin == 0
-    datePath = 'Y:\Data_pez3000\20140513';
-    runName = 'run002_pez3003_20140513';
-    
-    %     datePath = 'Y:\Data_pez3000\20140711';
-    %     runName = 'run052_pez3003_20140711';
-    
-end
 %% %%% computer and directory variables and information
-op_sys = system_dependent('getos');
-if contains(op_sys,'Microsoft Windows')
-    archDir = [filesep filesep 'dm11' filesep 'cardlab'];
-    dm11Dir = [filesep filesep 'dm11' filesep 'cardlab'];
-else
-    archDir = [filesep 'Volumes' filesep 'cardlab'];
-    if ~exist(archDir,'file')
-        archDir = [filesep 'Volumes' filesep 'card-1'];
-    end
-    dm11Dir = [filesep 'Volumes' filesep 'cardlab'];
-end
-if ~exist(archDir,'file')
-    error('Archive access failure')
-end
-if ~exist(dm11Dir,'file')
-    error('dm11 access failure')
-end
-analysisDir = fullfile(archDir,'Data_pez3000_analyzed');
-failure_path = fullfile(analysisDir,'errorLogs','experimentRefErrors.txt');
-
 [~,localUserName] = dos('echo %USERNAME%');
 localUserName = localUserName(1:end-1);
 repositoryName = 'pezAnalysisRepository';
 repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
-subfun_dir = fullfile(repositoryDir,'pezProc_subfunctions');
-saved_var_dir = fullfile(repositoryDir,'pezProc_saved_variables');
+fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
+
+analysisDir = fullfile(fileDir,'Data_pez3000_analyzed');
+failure_path = fullfile(analysisDir,'errorLogs','experimentRefErrors.txt');
+
+subfun_dir = fullfile(repositoryDir,'flyPEZanalysis','pezProc_subfunctions');
+saved_var_dir = fullfile(repositoryDir,'flyPEZanalysis','pezProc_saved_variables');
 addpath(repositoryDir,subfun_dir,saved_var_dir)
-addpath(fullfile(repositoryDir,'Pez3000_Gui_folder','Matlab_functions','Support_Programs'))
+addpath(fullfile(repositoryDir,'flyPEZsetup','Matlab_functions','Support_Programs'))
 
 ignorePath = fullfile(analysisDir,'ignoreLists','videos2ignoreList.txt');
 ignoreCell = readtable(ignorePath,'Delimiter','\t','ReadVariableNames',false);
@@ -808,9 +770,13 @@ end
 end
 
 function photoStimStruct = photoactivationAnalyzer(photoStimStruct,exptID)
+[~,localUserName] = dos('echo %USERNAME%');
+localUserName = localUserName(1:end-1);
+repositoryName = 'pezAnalysisRepository';
+repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
+fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
 
-savedPhotostimDir = [filesep filesep 'DM11' filesep 'cardlab' filesep,...
-    'pez3000_variables' filesep 'photoactivation_stimuli'];
+savedPhotostimDir = fullfile(fileDir,'pez3000_variables','photoactivation_stimuli');
 
 nidaqData = photoStimStruct.nidaq_data;
 nidaqData = double(nidaqData)./256;

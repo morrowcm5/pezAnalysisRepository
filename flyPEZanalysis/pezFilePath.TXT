@@ -1,1 +1,1 @@
-'//dm11.hhmi.org/cardlab'
+\\dm11.hhmi.org\cardlab

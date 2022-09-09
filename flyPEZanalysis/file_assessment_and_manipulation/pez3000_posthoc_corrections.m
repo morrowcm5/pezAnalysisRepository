@@ -1,27 +1,13 @@
 function pez3000_posthoc_corrections
 
 %%%%% computer and directory variables and information
-op_sys = system_dependent('getos');
-if strfind(op_sys,'Microsoft Windows 7')
-    %    archDir = [filesep filesep 'arch' filesep 'card'];
-%    archDir = [filesep filesep 'tier2' filesep 'card'];
-    archDir = [filesep filesep 'dm11' filesep 'cardlab'];
-    dm11Dir = [filesep filesep 'dm11' filesep 'cardlab'];
-else
-%    archDir = [filesep 'Volumes' filesep 'card'];
-    archDir = [filesep 'Volumes' filesep 'cardlab'];
-    if ~exist(archDir,'file')
-        archDir = [filesep 'Volumes' filesep 'card-1'];
-    end
-    dm11Dir = [filesep 'Volumes' filesep 'cardlab'];
-end
-if ~exist(archDir,'file')
-    error('Archive access failure')
-end
-if ~exist(dm11Dir,'file')
-    error('dm11 access failure')
-end
-analysisDir = fullfile(archDir,'Data_pez3000_analyzed');
+[~,localUserName] = dos('echo %USERNAME%');
+localUserName = localUserName(1:end-1);
+repositoryName = 'pezAnalysisRepository';
+repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
+fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
+
+analysisDir = fullfile(fileDir,'Data_pez3000_analyzed');
 ignorePath = fullfile(analysisDir,'ignoreLists','runs2ignoreList.txt');
 ignoreCell = readtable(ignorePath,'Delimiter','\t','ReadVariableNames',false);
 runs2ignoreCell = table2cell(ignoreCell);
@@ -38,7 +24,7 @@ for iterC = 1:size(correctionsTable,1)
     end
     for iterD = 1:numel(dateList)
         dateRef = dateList{iterD};
-        dateDir = fullfile(archDir,'Data_pez3000',dateRef);
+        dateDir = fullfile(fileDir,'Data_pez3000',dateRef);
         runList = dir(fullfile(dateDir,'run*'));
         runList = {runList(:).name}';
         if ~isempty(correctionsTable.AffectedRuns{iterC})

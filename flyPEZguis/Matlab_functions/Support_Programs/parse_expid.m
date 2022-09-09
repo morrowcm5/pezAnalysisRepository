@@ -14,12 +14,14 @@ if ischar(inputVar)
     
     
     if isempty(Collection)
-        op_sys = system_dependent('getos');
-        if ~isempty(strfind(op_sys,'Microsoft Windows 7'))
-            file_dir = '\\DM11\cardlab\Pez3000_Gui_folder\Gui_saved_variables';
-        else
-            file_dir = '/Volumes/cardlab/Pez3000_Gui_folder/Gui_saved_variables';
-        end
+        
+        [~,localUserName] = dos('echo %USERNAME%');
+        localUserName = localUserName(1:end-1);
+        repositoryName = 'pezAnalysisRepository';
+        repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
+        fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
+        
+        file_dir = fullfile(fileDir,'Pez3000_Gui_folder','Gui_saved_variables');
         
         Collection = load([file_dir filesep 'Saved_Collection.mat']);
         Genotypes  = load([file_dir filesep 'Saved_Genotypes.mat']);

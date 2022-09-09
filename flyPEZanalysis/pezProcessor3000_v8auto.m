@@ -27,27 +27,16 @@ visualizer_name = 'trackingVisualizer3000_v14';
 
 
 %%%%% computer and directory variables and information
-op_sys = system_dependent('getos');
-if contains(op_sys,'Microsoft Windows')
-    archDir = [filesep filesep 'dm11' filesep 'cardlab'];
-    dm11Dir = [filesep filesep 'dm11' filesep 'cardlab'];
-else
-    archDir = [filesep 'Volumes' filesep 'cardlab'];
-    if ~exist(archDir,'file')
-        archDir = [filesep 'Volumes' filesep 'card-1'];
-    end
-    dm11Dir = [filesep 'Volumes' filesep 'cardlab'];
-end
-if ~exist(archDir,'file')
-    error('Archive access failure')
-end
-if ~exist(dm11Dir,'file')
-    error('dm11 access failure')
-end
+[~,localUserName] = dos('echo %USERNAME%');
+localUserName = localUserName(1:end-1);
+repositoryName = 'pezAnalysisRepository';
+repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
+fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
+
 set(0,'showhiddenhandles','on')
 delete(get(0,'children'))
-housekeepingDir = fullfile(dm11Dir,'Pez3000_Gui_folder','defaults_and_housekeeping_variables');
-analysisDir = fullfile(archDir,'Data_pez3000_analyzed');
+housekeepingDir = fullfile(fileDir,'Pez3000_Gui_folder','defaults_and_housekeeping_variables');
+analysisDir = fullfile(fileDir,'Data_pez3000_analyzed');
 [~,localUserName] = dos('echo %USERNAME%');
 localUserName = localUserName(1:end-1);
 repositoryName = 'pezAnalysisRepository';
@@ -211,7 +200,7 @@ if exptCt > 0
     end
     pez3000_statusAssessment_v2(exptIDlist)
     errorList = errTally(cellfun(@(x) ~isempty(x),errTally(:,1)),3); %#ok<NASGU>
-    save(fullfile(archDir,'Data_pez3000_analyzed','errorLogs','graphingVariableGenerationErrors.mat'),'errorList')
+    save(fullfile(fileDir,'Data_pez3000_analyzed','errorLogs','graphingVariableGenerationErrors.mat'),'errorList')
 end
 parTable = readtable(parCtrlPath,'delimiter',',');
 parTable.action{strcmp(parTable.computer,host)} = 'stop';
