@@ -7,16 +7,14 @@ close all force
 %%%%% computer and directory variables and information
 [~,localUserName] = dos('echo %USERNAME%');
 localUserName = localUserName(1:end-1);
-repositoryName = 'Photron_flyPez3000';
-repositoryDir = ['C:\Users\' localUserName '\Documents\' repositoryName];
-if ~isdir(repositoryDir)
-    repositoryDir = ['C:\Users\' localUserName '.HHMI\Documents\' repositoryName];
-end
-data_dir = [filesep filesep 'dm11' filesep 'cardlab' filesep 'Data_pez3000'];
-variablesDir = [filesep filesep 'dm11' filesep 'cardlab' filesep 'pez3000_variables'];
+repositoryName = 'pezAnalysisRepository';
+repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
+fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
+data_dir = fullfile(fileDir,'Data_pez3000');
+variablesDir = fullfile(fileDir,'pez3000_variables');
 snapDir = fullfile(data_dir,'Captured_Images');
 
-cd(repositoryDir)
+cd(fullfile(repositoryDir,'flyPEZoperation'))
 
 % computer-specific information
 [~, comp_name] = system('hostname');
@@ -869,7 +867,7 @@ set(hPezSlid.block,'callback',@hOpen1Callback)
 set(hPezMode.parent,'SelectionChangeFcn',@pezMonitorFun)
 
 %%%% Fly Detect Setup %%%%
-template_dir = fullfile(repositoryDir,'pez3000_templates');
+template_dir = fullfile(repositoryDir,'flyPEZoperation','pez3000_templates');
 tmplName = 'template_flyDetect.mat';
 tmplLoading = load(fullfile(template_dir,tmplName));
 tmplGeno = tmplLoading.geno;
