@@ -6,7 +6,14 @@ function [stimStruct] = initializeVisualStimulusGeneralUDP_brighter
 AssertOpenGL;
 Screen('Preference','Verbosity',2);
 
-variablesDir = [filesep filesep 'dm11' filesep 'cardlab' filesep 'pez3000_variables'];
+%%%%% computer and directory variables and information
+[~,localUserName] = dos('echo %USERNAME%');
+localUserName = localUserName(1:end-1);
+repositoryName = 'pezAnalysisRepository';
+repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
+fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
+variablesDir = fullfile(fileDir,'pez3000_variables');
+
 [~, comp_name] = system('hostname');
 comp_name = comp_name(1:end-1); %Remove trailing character.
 compDataPath = fullfile(variablesDir,'computer_info.xlsx');

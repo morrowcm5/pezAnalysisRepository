@@ -1,6 +1,14 @@
 function [stimTrigStruct] = initializeFramesFromFileUDP(stimStruct,fileName)
 
-stimLoad = load(fullfile('\\dm11\cardlab\pez3000_variables\visual_stimuli',fileName));
+%%%%% computer and directory variables and information
+[~,localUserName] = dos('echo %USERNAME%');
+localUserName = localUserName(1:end-1);
+repositoryName = 'pezAnalysisRepository';
+repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
+fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
+variablesDir = fullfile(fileDir,'pez3000_variables');
+
+stimLoad = load(fullfile(variablesDir,'visual_stimuli',fileName));
 stimulusStruct = stimLoad.stimulusStruct;
 
 %%%%% Establish variables needed in stimulus presentation
