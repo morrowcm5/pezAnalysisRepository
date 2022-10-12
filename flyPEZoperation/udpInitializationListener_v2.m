@@ -1,7 +1,16 @@
 function udpInitializationListener_v2
 
 %%%%% computer and directory variables and information
-variablesDir = [filesep filesep 'dm11' filesep 'cardlab' filesep 'pez3000_variables'];
+[~,localUserName] = dos('echo %USERNAME%');
+localUserName = localUserName(1:end-1);
+repositoryName = 'pezAnalysisRepository';
+repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
+fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
+variablesDir = fullfile(fileDir,'pez3000_variables');
+
+
+
+%variablesDir = [filesep filesep 'dm11' filesep 'cardlab' filesep 'pez3000_variables'];
 [~, comp_name] = system('hostname');
 comp_name = comp_name(1:end-1); %Remove trailing character.
 compDataPath = fullfile(variablesDir,'computer_info.xlsx');
