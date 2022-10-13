@@ -12,7 +12,14 @@ optimizeOutsideView = 0;
 %%%%%%%%%%%%%%%%%%%%%%%%
 
 % Get communications variables
-variablesDir = [filesep filesep 'dm11' filesep 'cardlab' filesep 'pez3000_variables'];
+%%%%% computer and directory variables and information
+[~,localUserName] = dos('echo %USERNAME%');
+localUserName = localUserName(1:end-1);
+repositoryName = 'pezAnalysisRepository';
+repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
+fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
+variablesDir = fullfile(fileDir,'pez3000_variables');
+
 [~, comp_name] = system('hostname');
 comp_name = comp_name(1:end-1); %Remove trailing character.
 compDataPath = fullfile(variablesDir,'computer_info.xlsx');
@@ -21,12 +28,12 @@ compRef = find(strcmpi(compData.control_computer_name,comp_name));%this computer
 if isempty(compRef)
     compRef = 1;
     disp('computer not valid')
-%     return
+    %     return
 end
 hostIP = compData.stimulus_computer_IP{compRef};
 portNum = 21566;
 
-calibrateOp = 5;
+calibrateOp = 1;
 %1 - crosshairs
 %2 - 10-cm lines
 %3 - transition space for setting outer transition ring position
@@ -61,7 +68,7 @@ switch pezName
         % Measure the distance from the top of the mirror plane to the lens
         atMirPlane2projector = 33.25;%in inches
         % CALIBRATE OP 2
-        % Using tailor's measuring tape, empirically determine the 
+        % Using tailor's measuring tape, empirically determine the
         % circimference of the dome
         sphereCircumference = 475;%in millimeters
         % Adjust the following until the scale of the top projection aligns
@@ -84,7 +91,7 @@ switch pezName
         topThreshFactor = 1.035;
         %reference flicker window
         stimRefROI = [95 435];%x1 y1 from top,left of screen
-        
+
         % CALIBRATE OP 4
         % The following are for fine-tuning, needed to skew diagonally.
         % Positive numbers for 'TB' rocks the mirror-reflected ring towards
@@ -92,21 +99,21 @@ switch pezName
         % ring to the right from the perspective of the camera.
         hypSkewTB = -0.000;
         hypSkewLR = -0.006;
-        
+
         %positive numbers twist top or right
         hypTwistA = 0.07;%right side twist
         hypTwistB = 0.0;%left side twist
         hypTwistC = 0.0;%bottom twist
         hypTwistD = 0.0;%top twist
-        
+
     case 'pez3002' %stimulus computer no. 2
-%         
-%         %positive numbers twist top or right
-%         hypTwistA = 0.11;%right side twost
-%         hypTwistB = -0.04;%left side twist
-%         hypTwistC = 0.0;%bottom twost
-%         hypTwistD = 0.0;%top twist
-        
+        %
+        %         %positive numbers twist top or right
+        %         hypTwistA = 0.11;%right side twost
+        %         hypTwistB = -0.04;%left side twist
+        %         hypTwistC = 0.0;%bottom twost
+        %         hypTwistD = 0.0;%top twist
+
         atMirPlane2projector = 33.25;
         sphereCircumference = 473.5;
         zoomTheta = 19.85;
@@ -116,13 +123,13 @@ switch pezName
         stimRefROI = [92 430];
         hypSkewTB = -0.00;
         hypSkewLR = -0.002;
-        
+
         %positive numbers twist top or right
         hypTwistA = 0.05;%right side twost
         hypTwistB = 0.0;%left side twist
         hypTwistC = 0.05;%bottom twost
         hypTwistD = 0.0;%top twist
-        
+
     case 'pez3003' %stimulus computer no. 3
         atMirPlane2projector = 34.4;
         sphereCircumference = 475;
@@ -138,7 +145,7 @@ switch pezName
         %        hypSkewLR = 0.006;
         hypSkewTB = 0.005;
         hypSkewLR = -0.006;
-        
+
         %positive numbers twist top or right
         hypTwistA = 0.0;%right side twost
         hypTwistB = 0.0;%left side twist
@@ -153,17 +160,62 @@ switch pezName
         topThreshFactor = 1.035;
         whRatioAdjust = 0.99;
         stimRefROI = [95 435];
-%         %hypSkewTB = -0.005;
-%         hypSkewTB = -0.035;
-%         hypSkewLR = -0.033;
+        %         %hypSkewTB = -0.005;
+        %         hypSkewTB = -0.035;
+        %         hypSkewLR = -0.033;
         hypSkewTB = -0.008;
         hypSkewLR = -0.0;
-        
+
         %positive numbers twist top or right
         hypTwistA = 0.00;%right side twost
         hypTwistB = 0.00;%left side twist
         hypTwistC = 0.005;%bottom twost
         hypTwistD = 0.00;%top twist
+
+    case 'pez3005' %stimulus computer no. 1
+        % CALIBRATE OP 1
+        % Measure the distance from the top of the mirror plane to the lens
+        atMirPlane2projector = 34;%in inches
+        % CALIBRATE OP 2
+        % Using tailor's measuring tape, empirically determine the
+        % circimference of the dome
+        sphereCircumference = 475;%in millimeters
+        % Adjust the following until the scale of the top projection aligns
+        % with the 10mm marks on the measuring tape. Bigger numbers reduce
+        % the spacing between the lines.
+        zoomTheta = 19.95;%in degrees
+        % Adjust the following until the bottom projection dashed lines
+        % align with the two top projection dashed lines.  Bigger numbers
+        % make the bottom lines lower.  When the dashed lines align, the
+        % solid ones should all line up with the 10-mm marks.  If not,
+        % slightly adjust the zoom and try again.
+        % CALIBRATE OP 3
+        sphDropDiff = 0.225;
+        % Adjust the following until the sides align.  Bigger numbers make
+        % the mirror reflection go down on the sides relative to the top
+        % reflection.
+        whRatioAdjust = 0.990;
+        % Position the transition from top-projection to mirror-projection
+        % to the edge of the mirror
+        topThreshFactor = 1.035;
+        %reference flicker window
+        stimRefROI = [95 435];%x1 y1 from top,left of screen
+
+        % CALIBRATE OP 4
+        % The following are for fine-tuning, needed to skew diagonally.
+        % Positive numbers for 'TB' rocks the mirror-reflected ring towards
+        % the camera.  Positive numbers for LR rock the mirror reflected
+        % ring to the right from the perspective of the camera.
+        hypSkewTB = -0.000;
+        hypSkewLR = -0.006;
+
+        %positive numbers twist top or right
+        hypTwistA = 0.07;%right side twist
+        hypTwistB = 0.0;%left side twist
+        hypTwistC = 0.0;%bottom twist
+        hypTwistD = 0.0;%top twist
+
+
     otherwise
         disp('error')
         return
@@ -458,7 +510,7 @@ if optimizeOutsideView == 1
     fadeSeqVec = linspace(-0.05,1,rad2deg(fadeSpan)+2);
     fadeSeqVec(fadeSeqVec < 0) = 0;
     fadeSeqVec = fadeSeqVec.^0.85;
-%     fadeSeqVec = fadeSeqVec*0.8;
+    %     fadeSeqVec = fadeSeqVec*0.8;
 end
 fadeSeq = repmat(fadeSeqVec(2:end-1)',1,360);
 
@@ -697,9 +749,9 @@ save(varPath,'gainMatrix','stimEleForProc','stimAziForProc','stimRefROI',...
     'gainMatrixBrighter')
 %
 if calibrateOp == 5
-%     imwrite(gridIm,imReadPath)
+    %     imwrite(gridIm,imReadPath)
     imwrite(gainMatrixBrighter,imReadPath)
-%     imwrite(gainMatrix,imReadPath)
+    %     imwrite(gainMatrix,imReadPath)
     judp('send',portNum,hostIP,int8(54))
 end
 

@@ -262,17 +262,13 @@ stimulusStruct(1).imgWall = imgWall;
 stimulusStruct(1).flipReference = flipReference;
 
 
-save(fullfile('\\dm11\cardlab\pez3000_variables\visual_stimuli',fileName),'stimulusStruct','-v7.3')
+save(fullfile('\\locker-smb.engram.rc.zi.columbia.edu\card-locker\hhmiData\dm11\cardlab\pez3000_variables\visual_stimuli',fileName),'stimulusStruct','-v7.3')
 
 %% %%% Run only once, first
 
 %%%%% computer and directory variables and information
 op_sys = system_dependent('getos');
-if contains(op_sys,'Windows')
-    dm11Dir = [filesep filesep 'dm11' filesep 'cardlab'];
-else
-    dm11Dir = [filesep 'Volumes' filesep 'cardlab'];
-end
+    dm11Dir = '\\locker-smb.engram.rc.zi.columbia.edu\card-locker\hhmiData\dm11\cardlab\';
 if ~exist(dm11Dir,'file')
     error('dm11 access failure')
 end
@@ -424,8 +420,8 @@ Screen('Flip',win);
 % end
 
 %%
-addpath('C:\Users\morrowc2\Documents\Photron_flyPez3000')
-%stimStruct = initializeVisualStimulusGeneralUDP_brighter;
+%addpath('C:\Users\morrowc2\Documents\Photron_flyPez3000')
+stimStruct = initializeVisualStimulusGeneralUDP_brighter;
 % fileName = 'spiral_5to90_lv40_forward.mat';
 % fileName = 'constVelo_0to90_100degPerSec_blackonwhite';
 %fileName = 'stripe_1_15W_180p0H_12A_1Hz_8s';
