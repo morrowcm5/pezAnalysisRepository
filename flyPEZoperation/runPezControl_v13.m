@@ -162,7 +162,7 @@ end
 set(hExptEntry.managernotes,'max',2,'position',[.76 .05 .22 .4])
 downloadStrCell = {'Save Cut Rate','Save Full Rate','Restricted full rate','None'};
 set(hExptEntry.downloadops,'Style','popupmenu','string',downloadStrCell);
-userPath = '\\dm11\cardlab\Pez3000_Gui_folder\Gui_saved_variables\Saved_User_names.mat';
+userPath = fullfile(fileDir,'Pez3000_Gui_folder','Gui_saved_variables','Saved_User_names.mat');
 if exist(userPath,'file')
     userLoading = load(userPath);
     Saved_User_names = userLoading.Saved_User_names;

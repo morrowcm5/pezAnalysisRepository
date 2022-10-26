@@ -33,7 +33,7 @@ end
 hostIP = compData.stimulus_computer_IP{compRef};
 portNum = 21566;
 
-calibrateOp = 5;
+calibrateOp = 3;
 %1 - crosshairs
 %2 - 10-cm lines
 %3 - transition space for setting outer transition ring position
@@ -183,14 +183,14 @@ switch pezName
         % Adjust the following until the scale of the top projection aligns
         % with the 10mm marks on the measuring tape. Bigger numbers reduce
         % the spacing between the lines.
-        zoomTheta = 19.25;%in degrees
+        zoomTheta = 18.25;%in degrees
         % Adjust the following until the bottom projection dashed lines
         % align with the two top projection dashed lines.  Bigger numbers
         % make the bottom lines lower.  When the dashed lines align, the
         % solid ones should all line up with the 10-mm marks.  If not,
         % slightly adjust the zoom and try again.
         % CALIBRATE OP 3
-        sphDropDiff = 0.4;
+        sphDropDiff = 0.39;
         %sphDropDiff = 0;
         % Adjust the following until the sides align.  Bigger numbers make
         % the mirror reflection go down on the sides relative to the top
@@ -198,17 +198,17 @@ switch pezName
         whRatioAdjust = .99;
         % Position the transition from top-projection to mirror-projection
         % to the edge of the mirror
-        topThreshFactor = 1.02;
+        topThreshFactor = 1.035;
         %reference flicker window
-        stimRefROI = [95 405];%x1 y1 from top,left of screen
+        stimRefROI = [95 435];%x1 y1 from top,left of screen
 
         % CALIBRATE OP 4
         % The following are for fine-tuning, needed to skew diagonally.
         % Positive numbers for 'TB' rocks the mirror-reflected ring towards
         % the camera.  Positive numbers for LR rock the mirror reflected
         % ring to the right from the perspective of the camera.
-        hypSkewTB = -0.002;
-        hypSkewLR = -0.005;
+        hypSkewTB = -0.005;
+        hypSkewLR = -0.01;
 
         %positive numbers twist top or right
         hypTwistA = 0.00;%right side twist
