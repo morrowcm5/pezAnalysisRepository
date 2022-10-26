@@ -2,6 +2,7 @@ function vids2track_APT
 
 expIDdir = dir('Z:\Data_pez3000_analyzed');
 expIDlist = {expIDdir(4:end-13).name};
+% expIDlist = {'0242000004301578'};
 
 %disp('Select a subset of expIDs to only update their tracking info.  Press "Continue" to track all or "Quit Debugging" to abort APT updates')
 %keyboard

@@ -38,8 +38,8 @@ if isempty(mfilename)
     rescreenResults = [];
 end
 if isempty(rescreenResults)
-    rescreenResults = load('\\dm11\cardlab\WryanW\rescreen_results_full.mat');
-    rescreenResults = rescreenResults.rescreen_results_full;
+  %  rescreenResults = load('\\dm11\cardlab\WryanW\rescreen_results_full.mat');
+    %rescreenResults = rescreenResults.rescreen_results_full;
 end
 
 autoAnnoName = [exptID '_automatedAnnotations.mat'];
@@ -195,9 +195,9 @@ for iterV = 1:vidCt
         else
             manJumpTest = false;
         end
-        if max(strcmp(rescreenResults.Properties.RowNames,videoID))
-            manJumpTest = logical(rescreenResults.rescreen_results(videoID));
-        end
+        %if max(strcmp(rescreenResults.Properties.RowNames,videoID))
+         %   manJumpTest = logical(rescreenResults.rescreen_results(videoID));
+        %end
     else
         manJumpTest = NaN;
     end

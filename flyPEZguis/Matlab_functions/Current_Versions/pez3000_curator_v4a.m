@@ -1,4 +1,4 @@
-jfunction pez3000_curator_v4a
+function pez3000_curator_v4a
 %close all
 clc
 assessmentTag = '_rawDataAssessment.mat';

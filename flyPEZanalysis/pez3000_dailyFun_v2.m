@@ -21,7 +21,7 @@ subfun_dir = fullfile(repositoryDir,'flyPEZanalysis','pezProc_subfunctions');
 saved_var_dir = fullfile(repositoryDir,'flyPEZanalysis','pezProc_saved_variables');
 assessment_dir = fullfile(repositoryDir,'flyPEZanalysis','file_assessment_and_manipulation');
 addpath(repositoryDir,subfun_dir,saved_var_dir,assessment_dir)
-addpath(fullfile(repositoryDir,'flyPEZsetup','Matlab_functions','Support_Programs'))
+addpath(fullfile(repositoryDir,'flyPEZguis','Matlab_functions','Support_Programs'))
 addpath(fullfile(repositoryDir,'flyPEZanalysis','graphing_and_visualization'))
 
 disp('Raw data prep')

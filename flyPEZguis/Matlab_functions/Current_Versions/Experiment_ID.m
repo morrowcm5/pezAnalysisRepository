@@ -36,8 +36,10 @@ classdef Experiment_ID < handle
         parsed_filter = {'ParentA_name','ParentA_ID','ParentB_name','ParentB_ID','Males','Females','Name','Food_Type','Foiled','Stimuli_Type','Photo_Activation',...
             'Elevation','Azimuth','Stimuli_Delay','Photo_Delay'};
         auto_filter = {'jumpTest','autoFrameOfTakeoff','visStimProtocol','visStimFrameStart','visStimFrameCount','photoStimProtocol','photoStimFrameStart','photoStimFrameCount'};        
+%        manual_filter = {'frame_of_wing_movement','frame_of_leg_push','wing_down_stroke','frame_of_take_off','Annotated_by'};        
         manual_filter = {'frame_of_wing_movement','frame_of_leg_push','wing_down_stroke','frame_of_take_off'};        
-                
+  
+
 %        graph_filter = {'autoJumpTest','autoFot','trkEnd','stimStart','zeroFly_XYZT_fac1000','relPosition_FB_LR_T_fac1000','rawFly_XYZT_atFrmOne','flyLength','mm_per_pixel','zeroFly_StimAtStimStart','zeroFly_StimAtFrmOne','timestamp','temp_degC','humidity','IRlights'};
         graph_filter = {'manual_wingup_wingdwn_legpush','stimStart_flyTheta','autoJumpTest','autoFot','trkEnd','stimStart','zeroFly_XYZT_fac1000','relPosition_FB_LR_T_fac1000','rawFly_XYZT_atFrmOne','flyLength','mm_per_pixel','zeroFly_StimAtStimStart','zeroFly_StimAtFrmOne','timestamp','IRlights','zeroFly_Jump','flipBool'};
         graph_filter_v2 = {'manual_wingup_wingdwn_legpush','stimStart_flyTheta','autoJumpTest','autoFot','trkEnd','stimStart','zeroFly_XYZT_fac1000','relPosition_FB_LR_T_fac1000','rawFly_XYZT_atFrmOne','flyLength','mm_per_pixel','zeroFly_StimAtStimStart','zeroFly_StimAtFrmOne','zeroFly_Jump','flipBool'};
@@ -132,8 +134,11 @@ classdef Experiment_ID < handle
                 keep_logic = arrayfun(@(y) sum(cellfun(@(x) contains(x,'peakPos'),fieldnames(videoStats.videoStatisticsMerged.visual_stimulus_info{y}))) == 1,1:test_count)';
                 
                 peakPos = cellfun(@(x) x.peakPos,videoStats.videoStatisticsMerged(keep_logic,:).visual_stimulus_info,'uniformoutput',false);
-                peak_min(keep_logic) = cellfun(@(x) min(x), peakPos);
-                peak_min(~keep_logic) = 0;
+                peak_min(keep_logic) = cellfun(@(x) min(x), peakPos,'uniformoutput',false); %%CM added uniformoutput false 10/20/21
+                tf = cellfun('isempty',peak_min);
+                peak_min(tf) = {0};
+                peak_min = cell2mat(peak_min);%%CM added this and 2 lines above to make ~keep logic and empty peakPos set to 0
+                %peak_min(~keep_logic) = 0;
                                     
                 val = cellfun(@(x,y) x(y-8), nidaq_data(keep_logic & peak_min' > 10),peakPos(peak_min(keep_logic)' > 10),'uniformoutput',false);           
                 val_count(peak_min > 10) = cellfun(@(x) sum(x > (double(max(x))-5)), val);
@@ -163,7 +168,8 @@ classdef Experiment_ID < handle
             raw_data = load([obj.analysis_path filesep obj.exp_id filesep obj.exp_id '_rawDataAssessment.mat']);                                
             if strcmp(obj.filter_toggle,'on')
                 raw_data = raw_data.assessTable(:,obj.asses_filter);
-                manual_annotations = manual_annotations.manualAnnotations(:,obj.manual_filter);
+                 manual_annotations = manual_annotations.manualAnnotations;
+%                manual_annotations = manual_annotations.manualAnnotations(:,obj.manual_filter);
             else
                 raw_data = raw_data.assessTable;
                 manual_annotations = manual_annotations.manualAnnotations;
