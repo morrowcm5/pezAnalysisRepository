@@ -168,7 +168,7 @@ stimtex = cell(frmCt,1);
 imgCat = cell(frmCt,1);
 stimRefRGB = [2 3 1];%%%%%%%%%%%% Dont change this !!!!!!!!!!!!
 if pez5==1
-    stimRefRGB = [3 2 1];
+    stimRefRGB = [1 2 3];
 end
 %%
 for iterPrep = 1:frmCt
@@ -192,15 +192,12 @@ stimulusStruct = struct('stimTotalDuration',stimTotalDuration,'imgReset',imgRese
 stimulusStruct(1).imgCell = imgCat;
 stimulusStruct(1).flipReference = flipReference;
 
-<<<<<<< Updated upstream
-save(fullfile('\\locker-smb.engram.rc.zi.columbia.edu\card-locker\hhmiData\dm11\cardlab\pez3000_variables\visual_stimuli',fileName),'stimulusStruct','-v7.3')
-=======
+
 if pez5==1
     save(fullfile('\\dm11\cardlab\pez3000_variables\visual_stimuli_pez3005',fileName),'stimulusStruct','-v7.3')
 else
     save(fullfile('\\dm11\cardlab\pez3000_variables\visual_stimuli',fileName),'stimulusStruct','-v7.3')
 end
->>>>>>> Stashed changes
 
 %% %%% Run only once, first
 
