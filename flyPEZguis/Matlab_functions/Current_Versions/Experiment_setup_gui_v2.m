@@ -1,6 +1,6 @@
 function Experiment_setup_gui_v2
 repositoryDir = fileparts(fileparts(mfilename('fullpath')));
-addpath(fullfile(repositoryDir,'Support_Programs'))
+%addpath(fullfile(repositoryDir,'Support_Programs'))
 
 screen2use = 1;         % in multi screen setup, this determines which screen to be used
 screen2cvr = 0.85;       % portion of the screen to cover
