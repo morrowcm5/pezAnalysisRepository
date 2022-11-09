@@ -638,9 +638,15 @@ pezSlideVals = [defaultLightIntensity,0,0];
 hNames = {'IRlights','open','block'};
 hPezSlid = struct;
 for iterSD = 1:pezSlideCt
+    if iterSD==1
+          hPezSlid.(hNames{iterSD}) = uicontrol('Parent',hSubPnl(hP(iterSD)),'Style','slider',...
+        'Units','normalized','Min',0,'Max',75,'Value',pezSlideVals(iterSD),...
+        'Position',posOp{iterSD},'Backgroundcolor',backC);
+    else
     hPezSlid.(hNames{iterSD}) = uicontrol('Parent',hSubPnl(hP(iterSD)),'Style','slider',...
         'Units','normalized','Min',0,'Max',100,'Value',pezSlideVals(iterSD),...
         'Position',posOp{iterSD},'Backgroundcolor',backC);
+    end
 end
 
 % pezButtons
@@ -771,7 +777,7 @@ set(hDetectReadout.textbox,'fontunits','normalized')
 whiteCt = [];
 initVersion = 'reset';
 set(hPezRandom.aziFly,'enable','inactive','backgroundcolor',backC);
-visStimOptions = dir(fullfile(variablesDir,'visual_stimuli'));
+visStimOptions = dir(fullfile(variablesDir,'visual_stimuli_pez3005'));
 visStimOptions = {visStimOptions(3:end).name,'Crosshairs','Calibration','Grid','Full on',...
     'Full off','RGB Order test','Disk Size Measurement','None'};
 visStimPop = uicontrol(hSubPnl(12),'style','popupmenu','units','normalized',...
@@ -1312,7 +1318,7 @@ disp('camStartupFun passed')
                 calibrateCallback
             end
             %preparing visual stimulus
-            visStimOptions = dir(fullfile(variablesDir,'visual_stimuli'));
+            visStimOptions = dir(fullfile(variablesDir,'visual_stimuli_pez3005'));
             visStimOptions = {visStimOptions(3:end).name,'Crosshairs','Calibration','Grid','Full on',...
                 'Full off','RGB Order test','Disk Size Measurement','None'};
             
@@ -3464,7 +3470,7 @@ function hManualSetROIdown(~,~)
         else
             set(hPezButn.display,'enable','on')
         end
-        visStimOptions = dir(fullfile(variablesDir,'visual_stimuli'));
+        visStimOptions = dir(fullfile(variablesDir,'visual_stimuli_pez3005'));
         visStimOptions = {visStimOptions(3:end).name,'Crosshairs','Calibration','Grid','Full on',...
             'Full off','RGB Order test','Disk Size Measurement','None'};
         set(visStimPop,'String',visStimOptions)

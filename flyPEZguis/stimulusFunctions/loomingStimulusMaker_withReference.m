@@ -194,9 +194,9 @@ stimulusStruct(1).flipReference = flipReference;
 
 
 if pez5==1
-    save(fullfile('\\dm11\cardlab\pez3000_variables\visual_stimuli_pez3005',fileName),'stimulusStruct','-v7.3')
+    save(fullfile('\\locker-smb.engram.rc.zi.columbia.edu\card-locker\hhmiData\dm11\cardlab\pez3000_variables\visual_stimuli_pez3005',fileName),'stimulusStruct','-v7.3')
 else
-    save(fullfile('\\dm11\cardlab\pez3000_variables\visual_stimuli',fileName),'stimulusStruct','-v7.3')
+    save(fullfile('\\locker-smb.engram.rc.zi.columbia.edu\card-locker\hhmiData\dm11\cardlab\pez3000_variables\visual_stimuli',fileName),'stimulusStruct','-v7.3')
 end
 
 %% %%% Run only once, first
