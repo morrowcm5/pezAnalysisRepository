@@ -1,19 +1,16 @@
 function print_daily_labels_v3()
-    repositoryDir = fileparts(fileparts(mfilename('fullpath')));
-    addpath(fullfile(repositoryDir,'Support_Programs'))
     
     sort_type = 'JIDE';
 
-    op_sys = system_dependent('getos');
-    if contains(op_sys,'Microsoft Windows')
-        file_dir = '\\DM11\cardlab\Pez3000_Gui_folder\Gui_saved_variables';
-%        file_path = '\\tier2\card\Data_pez3000_analyzed';
-        file_path = '\\DM11\cardlab\Data_pez3000_analyzed';
-    else
-        file_dir = '/Volumes/cardlab/Pez3000_Gui_folder/Gui_saved_variables';
-%        file_path = '/Volumes/card/Data_pez3000_analyzed';
-        file_path = '/Volumes/cardlab/Data_pez3000_analyzed';
-    end     
+%%%%% computer and directory variables and information
+[~,localUserName] = dos('echo %USERNAME%');
+localUserName = localUserName(1:end-1);
+repositoryName = 'pezAnalysisRepository';
+repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
+fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
+file_dir = fullfile(fileDir,'Pez3000_Gui_folder','Gui_saved_variables');
+file_path = fullfile(fileDir,'Data_pez3000_analyzed');
+  
     
     exptSumName = 'experimentSummary.mat';
     exptSumPath = fullfile(file_path,exptSumName);
@@ -25,11 +22,7 @@ function print_daily_labels_v3()
     
     saved_groups = load([file_dir filesep 'Saved_Group_IDs_table.mat']);
     saved_groups = saved_groups.Saved_Group_IDs;    
-   
-%    exp_dir =  struct2dataset(dir(file_path));
-%    exp_dir = exp_dir.name;
-%    exp_dir = exp_dir(cellfun(@(x) length(x) == 16,exp_dir));   
-    
+      
     saved_exps = load_variables(file_dir, 'Saved_Experiments.mat'); 
     exp_dir = get(saved_exps,'ObsNames');
     exp_dir = exp_dir(cellfun(@(x) str2double(x(1:4)) >= 0,exp_dir));
@@ -588,7 +581,8 @@ function print_daily_labels_v3()
         end
         
         port = 9100;
-        ip = '10.103.40.85';
+       % ip = '10.103.40.85';
+       ip = '129.236.162.177';
         jobj = jtcp('request',ip,port,'serialize',false);
         msgCount = numel(print_str);
         for iterPrint = 1:msgCount
