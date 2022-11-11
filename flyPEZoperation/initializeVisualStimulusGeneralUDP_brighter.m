@@ -34,7 +34,7 @@ load(varPath)
 % Open onscreen window with black background clear color:
 if ~isempty(Screen('Windows')),Screen('CloseAll'),end
 
-screenidList = Screen('Screens');
+screenidList = Screen('Screens')
 for iterL = screenidList
     [width,~] = Screen('WindowSize', iterL);
     if width == 1024 || width == 1280

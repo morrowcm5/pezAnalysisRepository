@@ -195,6 +195,7 @@ disp(['timers counted: ' num2str(numel(timerfindall))])
 
     function window = simpleVisStimInitial
         AssertOpenGL;
+     %   Screen('Preference','Verbosity',2);
         if ~isempty(Screen('Windows')),Screen('CloseAll'),end
         % Select display with max id for our onscreen window:
         screenidList = Screen('Screens');

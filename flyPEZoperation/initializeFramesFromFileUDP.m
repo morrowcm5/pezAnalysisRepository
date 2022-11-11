@@ -8,7 +8,7 @@ repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
 fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
 variablesDir = fullfile(fileDir,'pez3000_variables');
 
-stimLoad = load(fullfile(variablesDir,'visual_stimuli',fileName));
+stimLoad = load(fullfile(variablesDir,'visual_stimuli_pez3005',fileName));
 stimulusStruct = stimLoad.stimulusStruct;
 
 %%%%% Establish variables needed in stimulus presentation
@@ -212,8 +212,12 @@ end
 
 
 %%% Flicker preparation
-stimRefImageWA = uint8(cat(3,zeros(5)+10,zeros(5)+255,zeros(5)+255));
-stimRefImageWB = uint8(cat(3,zeros(5)+255,zeros(5)+10,zeros(5)+10));
+%The following two lines work for RGB order [1 2 3]
+%stimRefImageWA = uint8(cat(3,zeros(5)+255,zeros(5)+10,zeros(5)+255));
+%stimRefImageWB = uint8(cat(3,zeros(5)+10,zeros(5)+255,zeros(5)+10));
+%The following two lines works for RGB order [2 3 1]
+ stimRefImageWA = uint8(cat(3,zeros(5)+10,zeros(5)+255,zeros(5)+255));
+ stimRefImageWB = uint8(cat(3,zeros(5)+255,zeros(5)+10,zeros(5)+10));
 stimRefImCell = {stimRefImageWA,stimRefImageWB};
 stimRefRefs = repmat([1 2]',ceil(frameCt/2),1);
 stimRefRefs = stimRefRefs(:);
