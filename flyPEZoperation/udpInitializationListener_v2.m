@@ -8,8 +8,9 @@ repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
 fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
 variablesDir = fullfile(fileDir,'pez3000_variables');
 
-[~, comp_name] = system('hostname');
-comp_name = comp_name(1:end-1); %Remove trailing character.
+%[~, comp_name] = system('hostname');
+comp_name = getenv('COMPUTERNAME');
+%comp_name = comp_name(1:end-1); %Remove trailing character.
 compDataPath = fullfile(variablesDir,'computer_info.xlsx');
 compData = dataset('XLSFile',compDataPath);
 compRef = find(strcmp(compData.stimulus_computer_name,comp_name));
