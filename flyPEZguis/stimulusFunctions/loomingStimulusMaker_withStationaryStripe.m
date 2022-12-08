@@ -3,13 +3,13 @@
 % clearvars -except stimStruct
 % close(gcf)
 % clc
-
+pez5 = 1;
 %%------Wall Parameters---------%
 stripe_width_deg = 45; % deg  
 stripe_height_deg = 180; % deg
-stripe_azimuth_center = 45; %deg
+stripe_azimuth_center = 0; %deg
 stripe_elevation_center = 0; %deg
-use_stripe_time = 1; %1 - use stripe time, 0 - do not use
+use_stripe_time = 0; %1 - use stripe time (wedge on for specified time then disappears), 0 - do not use (wedge is always on)
 stripe_time = 750; %time wedge is on in ms
 
 elecent = num2str(stripe_elevation_center);
@@ -23,7 +23,7 @@ finalStimSize = 90;
 ellovervee = 40;
 velocity = 8000;% degress per second
 duration = 30000;% milliseconds
-foregroundVal = 1;%value from 0 (black) to 1 (white) - this is the disk
+foregroundVal = 0;%value from 0 (black) to 1 (white) - this is the disk
 backgroundVal = 255;%0-255 (black-white)
 diskStyle = 1; % 1 - filled ; 2 - empty ('ring')
 ringSize = 10; % in degrees
@@ -172,6 +172,9 @@ imgtex = cell(frmCt,1);
 stimtex = cell(frmCt,1);
 imgCat = cell(frmCt,1);
 stimRefRGB = [2 3 1];%%%%%%%%%%%% Dont change this !!!!!!!!!!!!
+if pez5==1
+    stimRefRGB = [1 2 3];
+end
 
 for iterPrep = 1:frmCt
     
@@ -261,8 +264,12 @@ stimulusStruct(1).imgCell = imgCat;
 stimulusStruct(1).imgWall = imgWall;
 stimulusStruct(1).flipReference = flipReference;
 
+if pez5==1
+    save(fullfile('\\locker-smb.engram.rc.zi.columbia.edu\card-locker\hhmiData\dm11\cardlab\pez3000_variables\visual_stimuli_pez3005',fileName),'stimulusStruct','-v7.3')
+else
+    save(fullfile('\\locker-smb.engram.rc.zi.columbia.edu\card-locker\hhmiData\dm11\cardlab\pez3000_variables\visual_stimuli',fileName),'stimulusStruct','-v7.3')
+end
 
-save(fullfile('\\locker-smb.engram.rc.zi.columbia.edu\card-locker\hhmiData\dm11\cardlab\pez3000_variables\visual_stimuli',fileName),'stimulusStruct','-v7.3')
 
 %% %%% Run only once, first
 

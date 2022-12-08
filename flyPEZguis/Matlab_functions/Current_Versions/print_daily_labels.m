@@ -1,4 +1,4 @@
-function print_daily_labels_v3()
+function print_daily_labels()
     
     sort_type = 'JIDE';
 

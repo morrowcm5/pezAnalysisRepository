@@ -3,7 +3,7 @@
 % clearvars -except stimStruct
 % close(gcf)
 % clc
-
+pez5=1;
 %%------Wedge Parameters---------%
 stripe_width_deg = 45; % deg  
 stripe_height_deg = 180; % deg
@@ -168,6 +168,9 @@ imgtex = cell(frmCt,1);
 stimtex = cell(frmCt,1);
 imgCat = cell(frmCt,1);
 stimRefRGB = [2 3 1];%%%%%%%%%%%% Dont change this !!!!!!!!!!!!
+if pez5==1
+    stimRefRGB = [1 2 3];
+end
 
 for iterPrep = 1:frmCt
     
@@ -282,8 +285,12 @@ stimulusStruct(1).imgCell = imgCat;
 stimulusStruct(1).imgWall = imgWall;
 stimulusStruct(1).flipReference = flipReference;
 
+if pez5==1
+    save(fullfile('\\locker-smb.engram.rc.zi.columbia.edu\card-locker\hhmiData\dm11\cardlab\pez3000_variables\visual_stimuli_pez3005',fileName),'stimulusStruct','-v7.3')
+else
+    save(fullfile('\\locker-smb.engram.rc.zi.columbia.edu\card-locker\hhmiData\dm11\cardlab\pez3000_variables\visual_stimuli',fileName),'stimulusStruct','-v7.3')
+end
 
-save(fullfile('\\dm11\cardlab\pez3000_variables\visual_stimuli',fileName),'stimulusStruct','-v7.3')
 
 %% %%% Run only once, first
 

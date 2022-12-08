@@ -1,4 +1,4 @@
-function Experiment_setup_gui_v2
+function Experiment_setup_gui
 repositoryDir = fileparts(fileparts(mfilename('fullpath')));
 %addpath(fullfile(repositoryDir,'Support_Programs'))
 

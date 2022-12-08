@@ -4,9 +4,9 @@
 % close(gcf)
 % clc
 pez5 = 1; %makes stimulus for pez 5 for which projector has different RGB order
-initStimSize = 10;
-finalStimSize = 180;
-ellovervee = 10;
+initStimSize = 5;
+finalStimSize = 90;
+ellovervee = 40;
 velocity = 8000;% degress per second
 duration = 500;% milliseconds
 foregroundVal = 0;%value from 0 (black) to 1 (white) - this is the disk
@@ -168,7 +168,7 @@ stimtex = cell(frmCt,1);
 imgCat = cell(frmCt,1);
 stimRefRGB = [2 3 1];%%%%%%%%%%%% Dont change this !!!!!!!!!!!!
 if pez5==1
-    stimRefRGB = [3 2 1];
+    stimRefRGB = [1 2 3];
 end
 
 for iterPrep = 1:frmCt
