@@ -11,20 +11,18 @@ showFinal = 0;
 debug = 0;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 locator_data = [];
+
+
+%%%%% Loading templates
+speciesFolder = 'Drosophila_melanogaster';
 [~,localUserName] = dos('echo %USERNAME%');
 localUserName = localUserName(1:end-1);
 repositoryName = 'pezAnalysisRepository';
 repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
-subfun_dir = fullfile(repositoryDir,'pezProc_subfunctions');
-saved_var_dir = fullfile(repositoryDir,'pezProc_saved_variables');
-addpath(subfun_dir,saved_var_dir)
-addpath(fullfile(repositoryDir,'Pez3000_Gui_folder','Matlab_functions','Support_Programs'))
+fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
 
-%%%%% Loading templates
-speciesFolder = 'Drosophila_melanogaster';
-%archDir = '\\tier2\card';
-archDir = '\\Dm11\cardlab';
-templateDir = fullfile(archDir,'pez3000_flyTemplates',speciesFolder);
+analysisDir = fullfile(fileDir,'Data_pez3000_analyzed');
+templateDir = fullfile(fileDir,'pez3000_flyTemplates',speciesFolder);
 
 if isempty(mfilename) || nargin == 0
     runMode = 1;
@@ -51,8 +49,6 @@ strParts = strsplit(videoID,'_');
 exptID = strParts{4}(5:end);
 
 %%%% Establish data destination directories and file names
-%analysisDir = fullfile('\\tier2','card','Data_pez3000_analyzed');
-analysisDir = fullfile('\\DM11','cardlab','Data_pez3000_analyzed');
 expt_results_dir = fullfile(analysisDir,exptID);
 locator_visual_summary_dir = [expt_results_dir filesep exptID '_' locator_name '_summaryFigures'];
 if ~isdir(locator_visual_summary_dir), mkdir(locator_visual_summary_dir),end

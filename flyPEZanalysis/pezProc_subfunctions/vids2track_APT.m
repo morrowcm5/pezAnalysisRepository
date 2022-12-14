@@ -1,6 +1,13 @@
 function vids2track_APT
 
-expIDdir = dir('Z:\Data_pez3000_analyzed');
+[~,localUserName] = dos('echo %USERNAME%');
+localUserName = localUserName(1:end-1);
+repositoryName = 'pezAnalysisRepository';
+repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
+fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
+
+expIDdir = fullfile(fileDir,'Data_pez3000_analyzed');
+
 expIDlist = {expIDdir(4:end-13).name};
 % expIDlist = {'0242000004301578'};
 
@@ -15,29 +22,29 @@ for i = 1:length(expIDlist)
     try
     trkdir = fullfile('/groups/card/cardlab/Data_pez3000_analyzed/',exptID,'APT_Results/'); %directory where trk files should go
     trkdir = replace(trkdir,'\','/');
-    if ~exist(fullfile('Z:\Data_pez3000_analyzed\',exptID,'APT_Results'),'dir')
-        mkdir(fullfile('Z:\Data_pez3000_analyzed\',exptID,'APT_Results'))
+    if ~exist(fullfile(expIDdir,exptID,'APT_Results'),'dir')
+        mkdir(fullfile(expIDdir,exptID,'APT_Results'))
     end
     
     try
-        load('Z:\Pez3000_Gui_folder\Gui_saved_variables\APT2Track.mat')
+        load(fullfile('fileDir','Pez3000_Gui_folder\Gui_saved_variables\APT2Track.mat'))
     catch
         movies2track = table;
     end
     
-    load(fullfile('Z:\Data_pez3000_analyzed',exptID,[exptID '_rawDataAssessment']))
+    load(fullfile(expIDdir,exptID,[exptID '_rawDataAssessment']))
     assessTable.APT_Tracking(~strcmp(assessTable.Analysis_Status,'Analysis complete'))=0;
     
-    load(fullfile('Z:\Data_pez3000_analyzed',exptID,[exptID '_dataForVisualization']))
+    load(fullfile(expIDdir,exptID,[exptID '_dataForVisualization']))
     
-    load(fullfile('Z:\Data_pez3000_analyzed',exptID,[exptID '_videoStatisticsMerged'])) %#ok<*LOAD>
+    load(fullfile(expIDdir,exptID,[exptID '_videoStatisticsMerged'])) %#ok<*LOAD>
     vidstats = dataset2table(videoStatisticsMerged);
     
      ind = find(assessTable.APT_Tracking==1|assessTable.APT_Tracking==0);
    % ind = find(assessTable.APT_Tracking==1);
     for j = 1:length(ind) %if there is already APT tracking, change flag to 0
         assessTable.APT_Tracking(ind(j)) = 1;
-        filenme = fullfile('Z:\Data_pez3000_analyzed\',exptID,'APT_Results', [assessTable.Properties.RowNames{ind(j)} '.trk']);
+        filenme = fullfile(expIDdir,exptID,'APT_Results', [assessTable.Properties.RowNames{ind(j)} '.trk']);
         if exist(filenme,'file')
             fileinfo = dir(filenme);
             if (assessTable.APT_RetrackFlag(ind(j))==0)
@@ -52,7 +59,7 @@ for i = 1:length(expIDlist)
    % assessTable.APT_RetrackFlag(:) = now; %uncomment to add retrack flag to all tracked movies
     
     assessTable.APT_Tracking(assessTable.APT_RetrackFlag>0) = 1; %if retrack flag is set, set tracking flag
-    save(fullfile('Z:\Data_pez3000_analyzed',exptID,[exptID '_rawDataAssessment']),'assessTable')
+    save(fullfile(expIDdir,exptID,[exptID '_rawDataAssessment']),'assessTable')
     
     %Combine all assessment tables
     fullset = innerjoin(graphTable,assessTable,'Keys','Row'); %all videos from graph table for experiment list
@@ -117,7 +124,7 @@ for i = 1:length(expIDlist)
     % [~,ia,~] = unique(movies2track.movielist);
     % movies2track = movies2track(ia,:); %only include videos not already on list
     
-    save('Z:\Pez3000_Gui_folder\Gui_saved_variables\APT2Track.mat','movies2track');
+    save(fullfile('fileDir','Pez3000_Gui_folder\Gui_saved_variables\APT2Track.mat'),'movies2track');
     
     catch
         disp('Could not add experiment ID to APT list')
@@ -136,4 +143,4 @@ for i = 1:length(movielist)
 end
 
 movies2track(ind,:)=[]; %#ok<NASGU>
-save('Z:\Pez3000_Gui_folder\Gui_saved_variables\APT2Track.mat','movies2track');
+save(fullfile('fileDir','Pez3000_Gui_folder\Gui_saved_variables\APT2Track.mat'),'movies2track');

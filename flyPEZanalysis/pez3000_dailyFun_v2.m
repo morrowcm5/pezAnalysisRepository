@@ -39,7 +39,7 @@ disp('Finishing tasks')
 pez3000_posthoc_corrections
 makeExcelTable_v2
 
-disp('Updating APT Tracking List')
+%disp('Updating APT Tracking List')
 % vids2track_APT uncomment when APT pipeline is set up at columbia
 
 %exit
