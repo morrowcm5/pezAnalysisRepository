@@ -40,7 +40,7 @@ analysisDir = fullfile(fileDir,'Data_pez3000_analyzed');
 
 failure_path = fullfile(analysisDir,'errorLogs','pezProcessor300_v8auto_errorLog.txt');
 
-listSavePath = 'Z:\pez3000_variables\analysisVariables\videoList.mat';
+listSavePath = fullfile(fileDir,'pez3000_variables\analysisVariables\videoList.mat');
 if exist(listSavePath,'file')
     delete(listSavePath)%%%%%% comment out to keep saved list
 end
@@ -63,9 +63,9 @@ else
     videoList = cell(exptCt,1);
     for iterE = 1:exptCt
         exptID = exptIDlist{iterE};
-        if contains(exptID, '0243000017061061')
-            keyboard
-        end
+%         if contains(exptID, '0243000017061061')
+%             keyboard
+%         end
         assessmentPath = fullfile(analysisDir,exptID,[exptID '_rawDataAssessment.mat']);
         if exist(assessmentPath,'file') == 2
             try
