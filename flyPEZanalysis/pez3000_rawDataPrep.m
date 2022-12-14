@@ -577,7 +577,11 @@ for iterN = 1:numel(videoList)
     montyFileName = [videoID '_montage_v2.tif'];
     montyPath = fullfile(montyDir,montyFileName);
     if ~exist(montyPath,'file')
+        try
         makeMontageFrame_v2(montyDir,sampleFrameDir,videoListExt{iterN});
+        catch
+            keyboard
+        end
     end
 end
 for iterO = 1:numel(videoList)

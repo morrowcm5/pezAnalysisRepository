@@ -582,7 +582,7 @@ file_path = fullfile(fileDir,'Data_pez3000_analyzed');
         
         port = 9100;
        % ip = '10.103.40.85';
-       ip = '129.236.162.177';
+       ip = '129.236.161.087';
         jobj = jtcp('request',ip,port,'serialize',false);
         msgCount = numel(print_str);
         for iterPrint = 1:msgCount
