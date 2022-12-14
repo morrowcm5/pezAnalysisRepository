@@ -14,8 +14,9 @@ repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
 fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
 variablesDir = fullfile(fileDir,'pez3000_variables');
 
-[~, comp_name] = system('hostname');
-comp_name = comp_name(1:end-1); %Remove trailing character.
+%[~, comp_name] = system('hostname');
+%comp_name = comp_name(1:end-1); %Remove trailing character.
+comp_name = getenv('COMPUTERNAME');
 compDataPath = fullfile(variablesDir,'computer_info.xlsx');
 compData = dataset('XLSFile',compDataPath);
 compRef = find(strcmp(compData.stimulus_computer_name,comp_name));
@@ -34,7 +35,7 @@ load(varPath)
 % Open onscreen window with black background clear color:
 if ~isempty(Screen('Windows')),Screen('CloseAll'),end
 
-screenidList = Screen('Screens');
+screenidList = Screen('Screens')
 for iterL = screenidList
     [width,~] = Screen('WindowSize', iterL);
     if width == 1024 || width == 1280

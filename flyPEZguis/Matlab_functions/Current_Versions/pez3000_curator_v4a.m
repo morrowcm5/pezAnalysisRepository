@@ -23,28 +23,15 @@ assessmentTag = '_rawDataAssessment.mat';
 % great near the end of the portion tracked).
 
 %%%%% computer and directory variables and information
-op_sys = system_dependent('getos');
-if contains(op_sys,'Microsoft Windows')
-    archDir = [filesep filesep 'dm11' filesep 'cardlab'];
-    dm11Dir = [filesep filesep 'dm11' filesep 'cardlab'];
-else
-    archDir = [filesep 'Volumes' filesep 'cardlab'];
-    if ~exist(archDir,'file')
-        archDir = [filesep 'Volumes' filesep 'card-1'];
-    end
-    dm11Dir = [filesep 'Volumes' filesep 'cardlab'];
-end
-if ~exist(archDir,'file')
-    error('Archive access failure')
-end
-if ~exist(dm11Dir,'file')
-    error('dm11 access failure')
-end
-% parentDir = fullfile(archDir,'Data_pez3000');
-guiVarDir = fullfile(dm11Dir,'Pez3000_Gui_folder','Gui_saved_variables');
-% variablesDir = fullfile(dm11Dir,'pez3000_variables');
-housekeepingDir = fullfile(dm11Dir,'Pez3000_Gui_folder','defaults_and_housekeeping_variables');
-analysisDir = fullfile(archDir,'Data_pez3000_analyzed');
+[~,localUserName] = dos('echo %USERNAME%');
+localUserName = localUserName(1:end-1);
+repositoryName = 'pezAnalysisRepository';
+repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
+fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
+
+guiVarDir = fullfile(fileDir,'Pez3000_Gui_folder','Gui_saved_variables');
+housekeepingDir = fullfile(fileDir,'Pez3000_Gui_folder','defaults_and_housekeeping_variables');
+analysisDir = fullfile(fileDir,'Data_pez3000_analyzed');
 userPath = fullfile(guiVarDir,'Saved_User_names.mat');
 if exist(userPath,'file')
     userLoading = load(userPath);
@@ -116,9 +103,7 @@ hFigA = figure('NumberTitle','off','Name',figureTitle,...
     'visible','off');%,'colormap',gray(256));
 if isempty(mfilename)
     set(hFigA,'Visible','on')
-    repositoryDir = 'C:\Users\williamsonw\Documents\pezAnalysisRepository\Pez3000_Gui_folder\Matlab_functions';
 end
-addpath(fullfile(repositoryDir,'Support_Programs'))
 
 axesC = [0 0 0];
 axesPosInit = [.01 .2 .98 .79];

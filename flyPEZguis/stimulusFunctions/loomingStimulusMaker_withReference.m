@@ -3,14 +3,14 @@
 % clearvars -except stimStruct
 % close(gcf)
 % clc
-
-initStimSize = 10;
-finalStimSize = 180;
+pez5 = 1; %makes stimulus for pez 5 for which projector has different RGB order
+initStimSize = 5;
+finalStimSize = 90;
 ellovervee = 40;
 velocity = 8000;% degress per second
 duration = 500;% milliseconds
 foregroundVal = 0;%value from 0 (black) to 1 (white) - this is the disk
-backgroundVal = 255/2;%0-255 (black-white)
+backgroundVal = 255;%0-255 (black-white)
 diskStyle = 1; % 1 - filled ; 2 - empty ('ring')
 ringSize = 10; % in degrees
 stimChoice = 2;
@@ -167,7 +167,10 @@ imgtex = cell(frmCt,1);
 stimtex = cell(frmCt,1);
 imgCat = cell(frmCt,1);
 stimRefRGB = [2 3 1];%%%%%%%%%%%% Dont change this !!!!!!!!!!!!
-%%
+if pez5==1
+    stimRefRGB = [1 2 3];
+end
+
 for iterPrep = 1:frmCt
     imgCat{iterPrep} = cat(3,imgCell{stimDiameterReference(stimRefRGB(1),iterPrep)},...
         imgCell{stimDiameterReference(stimRefRGB(2),iterPrep)},...
@@ -189,7 +192,12 @@ stimulusStruct = struct('stimTotalDuration',stimTotalDuration,'imgReset',imgRese
 stimulusStruct(1).imgCell = imgCat;
 stimulusStruct(1).flipReference = flipReference;
 
-save(fullfile('\\locker-smb.engram.rc.zi.columbia.edu\card-locker\hhmiData\dm11\cardlab\pez3000_variables\visual_stimuli',fileName),'stimulusStruct','-v7.3')
+
+if pez5==1
+    save(fullfile('\\locker-smb.engram.rc.zi.columbia.edu\card-locker\hhmiData\dm11\cardlab\pez3000_variables\visual_stimuli_pez3005',fileName),'stimulusStruct','-v7.3')
+else
+    save(fullfile('\\locker-smb.engram.rc.zi.columbia.edu\card-locker\hhmiData\dm11\cardlab\pez3000_variables\visual_stimuli',fileName),'stimulusStruct','-v7.3')
+end
 
 %% %%% Run only once, first
 

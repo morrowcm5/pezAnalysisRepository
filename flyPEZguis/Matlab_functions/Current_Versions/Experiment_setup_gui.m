@@ -1,6 +1,6 @@
-function Experiment_setup_gui_v2
+function Experiment_setup_gui
 repositoryDir = fileparts(fileparts(mfilename('fullpath')));
-addpath(fullfile(repositoryDir,'Support_Programs'))
+%addpath(fullfile(repositoryDir,'Support_Programs'))
 
 screen2use = 1;         % in multi screen setup, this determines which screen to be used
 screen2cvr = 0.85;       % portion of the screen to cover
@@ -57,17 +57,16 @@ hother_name = uicontrol(hPanC,'Style','text','string','More Information','Units'
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% sets variables
 
-if contains(op_sys,'Microsoft Windows')
-    file_dir =  '\\DM11\cardlab\Pez3000_Gui_folder\Gui_saved_variables';
-    dateDir =   '\\DM11\cardlab\data_all';
-    stim_path = '\\DM11\cardlab\pez3000_variables\visual_stimuli';
-    photo_path = '\\DM11\cardlab\pez3000_variables\photoactivation_stimuli';
-else
-    file_dir = '/Volumes/cardlab/Pez3000_Gui_folder/Gui_saved_variables';
-    dateDir = '/Volumes/cardlab/data_all';
-    stim_path = '/Volumes/cardlab/pez3000_variables/visual_stimuli';
-    photo_path = '/Volumes/cardlab/pez3000_variables/photoactivation_stimuli';
-end
+%%%%% computer and directory variables and information
+[~,localUserName] = dos('echo %USERNAME%');
+localUserName = localUserName(1:end-1);
+repositoryName = 'pezAnalysisRepository';
+repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
+fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
+file_dir = fullfile(fileDir,'Pez3000_Gui_folder','Gui_saved_variables');
+dateDir =   fullfile(fileDir,'data_all');
+stim_path = fullfile(fileDir,'pez3000_variables','visual_stimuli');
+photo_path = fullfile(fileDir,'pez3000_variables','photoactivation_stimuli');
 
 file_path_users = 'Saved_User_names.mat';
 file_path_collection = 'Saved_Collection.mat';
@@ -1377,7 +1376,7 @@ flip_genotypes('off')
             set(hTdropdown(5),'string',new_id);
             set(hDuration_days,'String',sprintf('.....'));
             set(hDuration_runs,'String',sprintf('.....'));
-            set(hCount_val,'string','');
+            set(hCount_val,'string','100');
             
         end
         check_warnings

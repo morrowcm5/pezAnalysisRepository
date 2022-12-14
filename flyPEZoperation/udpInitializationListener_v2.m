@@ -8,8 +8,9 @@ repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
 fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
 variablesDir = fullfile(fileDir,'pez3000_variables');
 
-[~, comp_name] = system('hostname');
-comp_name = comp_name(1:end-1); %Remove trailing character.
+%[~, comp_name] = system('hostname');
+comp_name = getenv('COMPUTERNAME');
+%comp_name = comp_name(1:end-1); %Remove trailing character.
 compDataPath = fullfile(variablesDir,'computer_info.xlsx');
 compData = dataset('XLSFile',compDataPath);
 compRef = find(strcmp(compData.stimulus_computer_name,comp_name));
@@ -195,6 +196,7 @@ disp(['timers counted: ' num2str(numel(timerfindall))])
 
     function window = simpleVisStimInitial
         AssertOpenGL;
+     %   Screen('Preference','Verbosity',2);
         if ~isempty(Screen('Windows')),Screen('CloseAll'),end
         % Select display with max id for our onscreen window:
         screenidList = Screen('Screens');

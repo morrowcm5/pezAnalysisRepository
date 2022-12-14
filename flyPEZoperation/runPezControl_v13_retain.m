@@ -1,4 +1,4 @@
-function runPezControl_v13
+function runPezControl_v13_retain
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -7,14 +7,16 @@ close all force
 %%%%% computer and directory variables and information
 [~,localUserName] = dos('echo %USERNAME%');
 localUserName = localUserName(1:end-1);
-repositoryName = 'pezAnalysisRepository';
-repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
-fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
-data_dir = fullfile(fileDir,'Data_pez3000');
-variablesDir = fullfile(fileDir,'pez3000_variables');
+repositoryName = 'pezAnalysisRepository\flyPEZoperation';
+repositoryDir = ['C:\Users\' localUserName '\Documents\' repositoryName];
+if ~isdir(repositoryDir)
+    repositoryDir = ['C:\Users\' localUserName '.HHMI\Documents\' repositoryName];
+end
+data_dir = [filesep filesep 'dm11' filesep 'cardlab' filesep 'Data_pez3000'];
+variablesDir = [filesep filesep 'dm11' filesep 'cardlab' filesep 'pez3000_variables'];
 snapDir = fullfile(data_dir,'Captured_Images');
 
-cd(fullfile(repositoryDir,'flyPEZoperation'))
+cd(repositoryDir)
 
 % computer-specific information
 [~, comp_name] = system('hostname');
@@ -162,7 +164,7 @@ end
 set(hExptEntry.managernotes,'max',2,'position',[.76 .05 .22 .4])
 downloadStrCell = {'Save Cut Rate','Save Full Rate','Restricted full rate','None'};
 set(hExptEntry.downloadops,'Style','popupmenu','string',downloadStrCell);
-userPath = fullfile(fileDir,'Pez3000_Gui_folder','Gui_saved_variables','Saved_User_names.mat');
+userPath = '\\dm11\cardlab\Pez3000_Gui_folder\Gui_saved_variables\Saved_User_names.mat';
 if exist(userPath,'file')
     userLoading = load(userPath);
     Saved_User_names = userLoading.Saved_User_names;
@@ -638,15 +640,9 @@ pezSlideVals = [defaultLightIntensity,0,0];
 hNames = {'IRlights','open','block'};
 hPezSlid = struct;
 for iterSD = 1:pezSlideCt
-    if iterSD==1
-          hPezSlid.(hNames{iterSD}) = uicontrol('Parent',hSubPnl(hP(iterSD)),'Style','slider',...
-        'Units','normalized','Min',0,'Max',75,'Value',pezSlideVals(iterSD),...
-        'Position',posOp{iterSD},'Backgroundcolor',backC);
-    else
     hPezSlid.(hNames{iterSD}) = uicontrol('Parent',hSubPnl(hP(iterSD)),'Style','slider',...
         'Units','normalized','Min',0,'Max',100,'Value',pezSlideVals(iterSD),...
         'Position',posOp{iterSD},'Backgroundcolor',backC);
-    end
 end
 
 % pezButtons
@@ -777,7 +773,7 @@ set(hDetectReadout.textbox,'fontunits','normalized')
 whiteCt = [];
 initVersion = 'reset';
 set(hPezRandom.aziFly,'enable','inactive','backgroundcolor',backC);
-visStimOptions = dir(fullfile(variablesDir,'visual_stimuli_pez3005'));
+visStimOptions = dir(fullfile(variablesDir,'visual_stimuli'));
 visStimOptions = {visStimOptions(3:end).name,'Crosshairs','Calibration','Grid','Full on',...
     'Full off','RGB Order test','Disk Size Measurement','None'};
 visStimPop = uicontrol(hSubPnl(12),'style','popupmenu','units','normalized',...
@@ -873,7 +869,7 @@ set(hPezSlid.block,'callback',@hOpen1Callback)
 set(hPezMode.parent,'SelectionChangeFcn',@pezMonitorFun)
 
 %%%% Fly Detect Setup %%%%
-template_dir = fullfile(repositoryDir,'flyPEZoperation','pez3000_templates');
+template_dir = fullfile(repositoryDir,'pez3000_templates');
 tmplName = 'template_flyDetect.mat';
 tmplLoading = load(fullfile(template_dir,tmplName));
 tmplGeno = tmplLoading.geno;
@@ -1299,7 +1295,7 @@ disp('camStartupFun passed')
                 end
                 if strcmp(exptInfo.Trigger_Type{1},'Retain')
                     set(hPezRandom.retain,'Value',1)
-                    set(hExptEntry.duration,'string',40)
+                    set(hExptEntry.duration,'string',120) %060121-60 min
                 end
             end
             %preparing the experiment control box
@@ -1318,7 +1314,7 @@ disp('camStartupFun passed')
                 calibrateCallback
             end
             %preparing visual stimulus
-            visStimOptions = dir(fullfile(variablesDir,'visual_stimuli_pez3005'));
+            visStimOptions = dir(fullfile(variablesDir,'visual_stimuli'));
             visStimOptions = {visStimOptions(3:end).name,'Crosshairs','Calibration','Grid','Full on',...
                 'Full off','RGB Order test','Disk Size Measurement','None'};
             
@@ -1998,7 +1994,7 @@ disp('camStartupFun passed')
             end
             gateSelectCallback([],[])
         elseif strcmp(tExpt.Running,'on')
-            triggerCallback([],[])
+%             triggerCallback([],[])
         end
         detectTabs = 0;
         if strcmp(tExpt.Running,'off'), saveRun, end
@@ -2044,7 +2040,7 @@ disp('camStartupFun passed')
         %%%%% then the camera is triggered.
         stageIm = frmData(stageTab(5):stageTab(6),stageTab(3):stageTab(4));
         mVal = round(prctile(stageIm(:),95));
-        resetThresh = 50;%empirically determined brightest pixel when fly is present
+        resetThresh = 55;%empirically determined brightest pixel when fly is present
         if stageTab(1) == 0
             if mVal > resetThresh %must reach thresh to start looking for dips in brightness
                 stageTab(1:2) = [1,0];
@@ -2276,7 +2272,7 @@ disp('camStartupFun passed')
         
         
 %         posThresh = 5;%still not sure what values these should have
-        dirThresh = (pi/180)*10;%still not sure what values these should have
+        dirThresh = (pi/180)*40;%40;%still not sure what values these should have
         if detectTabs(1) == 4
 %             posDelta = sqrt(sum(detectTabs(2:3).^2));
             dirDelta = detectTabs(4);
@@ -3470,7 +3466,7 @@ function hManualSetROIdown(~,~)
         else
             set(hPezButn.display,'enable','on')
         end
-        visStimOptions = dir(fullfile(variablesDir,'visual_stimuli_pez3005'));
+        visStimOptions = dir(fullfile(variablesDir,'visual_stimuli'));
         visStimOptions = {visStimOptions(3:end).name,'Crosshairs','Calibration','Grid','Full on',...
             'Full off','RGB Order test','Disk Size Measurement','None'};
         set(visStimPop,'String',visStimOptions)
