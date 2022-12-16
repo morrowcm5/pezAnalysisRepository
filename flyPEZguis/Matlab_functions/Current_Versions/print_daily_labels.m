@@ -272,7 +272,9 @@ file_path = fullfile(fileDir,'Data_pez3000_analyzed');
         try
             new_food_var = cellfun(@(x,y) sprintf('%s -- Foilded :: %s',x,y),filtered_data.Food_Type,filtered_data.Foiled,'uniformoutput',false);
         catch
-             new_food_var = arrayfun(@(x,y) sprintf('%s -- Foilded :: %s',x,y),filtered_data.Food_Type,filtered_data.Foiled,'uniformoutput',false);
+             new_food_var = sprintf('%s -- Foilded :: %s',filtered_data.Food_Type,filtered_data.Foiled);
+        
+            %new_food_var = arrayfun(@(x,y) sprintf('%s -- Foilded :: %s',x,y),filtered_data.Food_Type,filtered_data.Foiled,'uniformoutput',false);
         end
         filtered_data = filtered_data(:,ismember( fieldnames(sample_data),collection_list));        
         

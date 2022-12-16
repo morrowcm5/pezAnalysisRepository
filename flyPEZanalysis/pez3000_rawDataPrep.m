@@ -193,7 +193,11 @@ if str2double(exptID(13:16)) < 100
 else
     exptInfo4photo = parse_expid_v2(exptID);
 end
+try
 exptInfo.Photo_Activation{1} = exptInfo4photo.Photo_Activation{1};
+catch
+    keyboard
+end
 
 if strcmp('Alternating',exptInfo.Photo_Activation{1})
     exptInfo.Photo_Activation = {{'pulse_General_widthBegin1000_widthEnd1000_cycles1_intensity20';
