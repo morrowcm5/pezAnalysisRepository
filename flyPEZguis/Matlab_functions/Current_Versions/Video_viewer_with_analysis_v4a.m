@@ -1,18 +1,17 @@
 function Video_viewer_with_analysis_v4a
-%% gets pathing info
-repositoryDir = fileparts(fileparts(fileparts(mfilename('fullpath'))));
-addpath(fullfile(repositoryDir,'Support_Programs'))
 
-op_sys = system_dependent('getos');
-if contains(op_sys,'Microsoft Windows')
-    file_dir = '\\DM11\cardlab\Pez3000_Gui_folder\Gui_saved_variables';
-    analysis_path = '\\DM11\cardlab\Data_pez3000_analyzed';
-    data_path = '\\DM11\cardlab\Data_pez3000'; 
-else
-    file_dir = '/Volumes/cardlab/Pez3000_Gui_folder/Gui_saved_variables';
-    analysis_path = '/Volumes/cardlab/Data_pez3000_analyzed';
-    data_path = '/Volumes/cardlab/Data_pez3000';    
-end
+%%%%% computer and directory variables and information
+[~,localUserName] = dos('echo %USERNAME%');
+localUserName = localUserName(1:end-1);
+repositoryName = 'pezAnalysisRepository';
+repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
+fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
+
+file_dir = fullfile(fileDir,'Pez3000_Gui_folder','Gui_saved_variables');
+analysis_path = fullfile(fileDir,'Data_pez3000_analyzed');
+data_path = fullfile(fileDir,'Data_pez3000');
+
+repositoryDir = fileparts(fileparts(fileparts(mfilename('fullpath'))));
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 saved_collections = load([file_dir filesep 'Saved_Collection.mat']);
@@ -386,15 +385,7 @@ setframeinput
                 load_files = exp_dir;
             else
                 Collect_index = get(saved_collections(strcmp(saved_collections.Collection_Name,collect_select),:),'ObsName');
-                if length(Collect_index)==1
-                    load_files = exp_dir(cellfun(@(x) strcmp(x(1:4),Collect_index{1}),exp_dir));
-                else
-                    load_files = [];
-                    for ii = 1:length(Collect_index)
-                        load_files = [load_files; exp_dir(cellfun(@(x) strcmp(x(1:4),Collect_index{ii}),exp_dir))];
-                    end
-                end
-                
+                load_files = exp_dir(cellfun(@(x) strcmp(x(1:4),Collect_index{1}),exp_dir));
             end
         elseif hObj == hTedit(3)
             set(hTedit(2),'value',1);
@@ -491,13 +482,14 @@ setframeinput
 %         else
             vid_list = temp_data.Complete_usuable_data.Properties.RowNames;
 %        end
+        
 %        filt_logic = ismember(man_annotations.Properties.RowNames,vid_list);
 %        filt_annotations = man_annotations(filt_logic,:);
 %        filt_annotations = man_annotations(vid_list,:);        
         filt_annotations = temp_data.Complete_usuable_data(vid_list,:);
         
- %       vid_list(cellfun(@(x) isempty(x), filt_annotations.Gender),:) = [];        
- %       filt_annotations(cellfun(@(x) isempty(x), filt_annotations.Gender),:) = [];
+        vid_list(cellfun(@(x) isempty(x), filt_annotations.Gender),:) = [];        
+        filt_annotations(cellfun(@(x) isempty(x), filt_annotations.Gender),:) = [];
 
         
         set(vids_count,'string',num2str(height(filt_annotations)),'ForegroundColor',rgb('red'))
@@ -537,9 +529,6 @@ setframeinput
 %             return
 %         end
         if get(hide_completed,'UserData') == 1
-            filt_annotations = filt_annotations(cellfun(@(x) ~strcmp(x,'Breadsp'), man_annotations.Annotated_by),:);
-            vid_list = filt_annotations.Properties.RowNames;
-            
             table_data = table2cell(filt_annotations(:,1:4));
             empty_logic = cellfun(@(x) isempty(x),table_data);
             nan_logic = cellfun(@(x) isnan(x) | isempty(x),table_data,'uniformoutput',false);
@@ -557,7 +546,7 @@ setframeinput
             missing_logic = ~(single_logic & done_gender);      %single with unknown gender            
             done_logic = ~(nan_res | empty_res);    %has all nans or data
             
-%            vid_list(done_logic & missing_logic) = [];
+            vid_list(done_logic & missing_logic) = [];
         end
         
         org_list_index = cellfun(@(y) sprintf('%04s',num2str(y)),num2cell(1:1:height(filt_annotations))','UniformOutput',false);
