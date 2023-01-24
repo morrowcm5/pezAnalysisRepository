@@ -13,6 +13,12 @@ clear all
 %     exit
 % end
 
+% Uncomment next three lines to update last date analyzed
+% load('Z:\Pez3000_Gui_folder\defaults_and_housekeeping_variables\lastDateAssessed_curator.mat')
+% dateFolderStr = '20221230';
+% save('Z:\Pez3000_Gui_folder\defaults_and_housekeeping_variables\lastDateAssessed_curator.mat','dateFolderStr')
+
+
 [~,localUserName] = dos('echo %USERNAME%');
 localUserName = localUserName(1:end-1);
 repositoryName = 'pezAnalysisRepository';
