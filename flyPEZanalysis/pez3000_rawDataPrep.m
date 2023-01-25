@@ -103,6 +103,7 @@ else
 end
 videoListExt = {videoListExt(:).name}';
 dotBug = cellfun(@(x) strcmp(x(1),'.'),videoListExt);
+
 videoListExt(dotBug) = [];
 videoList = cellfun(@(x) x(1:end-4),videoListExt,'uniformoutput',false);
 runStatName = dir(fullfile(runPath,'*runStatistics.mat'));
