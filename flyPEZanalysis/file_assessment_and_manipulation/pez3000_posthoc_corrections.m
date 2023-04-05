@@ -16,14 +16,18 @@ correctionsTable = readtable(excelPath);
 correctionsTable = correctionsTable(strcmp(correctionsTable.Consequence,'Fail'),:);
 %%
 for iterC = 1:size(correctionsTable,1)
-    if isempty(correctionsTable.DateEnd{iterC})
+    if isnan(correctionsTable.DateEnd(iterC))
         dateList = correctionsTable.DateBegin(iterC);
     else
-        dateList = datestr(datenum(correctionsTable.DateBegin{1},'yyyymmdd'):datenum(correctionsTable.DateEnd{1},'yyyymmdd'),'yyyymmdd');
+        dateList = datestr(datenum(mat2str(correctionsTable.DateBegin(1)),'yyyymmdd'):datenum(mat2str(correctionsTable.DateEnd(1)),'yyyymmdd'),'yyyymmdd');
         dateList = cellstr(dateList);
     end
     for iterD = 1:numel(dateList)
-        dateRef = dateList{iterD};
+        if numel(dateList)==1
+            dateRef=dateList(iterD);
+        else
+            dateRef = dateList{iterD};
+        end
         dateDir = fullfile(fileDir,'Data_pez3000',dateRef);
         runList = dir(fullfile(dateDir,'run*'));
         runList = {runList(:).name}';
@@ -48,7 +52,7 @@ for iterC = 1:size(correctionsTable,1)
             end
             load(fullfile(dateDir,runID,[runID '_runStatistics.mat']))
             if ~isfield(runStats,'experimentID')
-                disp('bad run stats')
+              %  disp('bad run stats')
                 continue
             end
             if ~max(strcmp(runs2ignoreCell,runID))

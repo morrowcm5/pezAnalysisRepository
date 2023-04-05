@@ -103,6 +103,7 @@ else
 end
 videoListExt = {videoListExt(:).name}';
 dotBug = cellfun(@(x) strcmp(x(1),'.'),videoListExt);
+
 videoListExt(dotBug) = [];
 videoList = cellfun(@(x) x(1:end-4),videoListExt,'uniformoutput',false);
 runStatName = dir(fullfile(runPath,'*runStatistics.mat'));
@@ -193,7 +194,11 @@ if str2double(exptID(13:16)) < 100
 else
     exptInfo4photo = parse_expid_v2(exptID);
 end
+try
 exptInfo.Photo_Activation{1} = exptInfo4photo.Photo_Activation{1};
+catch
+    keyboard
+end
 
 if strcmp('Alternating',exptInfo.Photo_Activation{1})
     exptInfo.Photo_Activation = {{'pulse_General_widthBegin1000_widthEnd1000_cycles1_intensity20';
@@ -577,7 +582,11 @@ for iterN = 1:numel(videoList)
     montyFileName = [videoID '_montage_v2.tif'];
     montyPath = fullfile(montyDir,montyFileName);
     if ~exist(montyPath,'file')
+        try
         makeMontageFrame_v2(montyDir,sampleFrameDir,videoListExt{iterN});
+        catch
+            keyboard
+        end
     end
 end
 for iterO = 1:numel(videoList)

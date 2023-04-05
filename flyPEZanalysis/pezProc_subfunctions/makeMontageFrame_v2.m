@@ -7,28 +7,12 @@ if nargin == 0
 end
 % installVideoUtils
 %%%%% computer and directory variables and information
-op_sys = system_dependent('getos');
-if contains(op_sys,'Microsoft Windows')
-%    archDir = [filesep filesep 'tier2' filesep 'card'];
-
-    archDir = [filesep filesep 'dm11' filesep 'cardlab'];
-    dm11Dir = [filesep filesep 'dm11' filesep 'cardlab'];
-else
-%    archDir = [filesep 'Volumes' filesep 'card'];
-    archDir = [filesep 'Volumes' filesep 'cardlab'];
-    if ~exist(archDir,'file')
-        archDir = [filesep 'Volumes' filesep 'card-1'];
-    end
-    dm11Dir = [filesep 'Volumes' filesep 'cardlab'];
-end
-if ~exist(archDir,'file')
-    error('Archive access failure')
-end
-if ~exist(dm11Dir,'file')
-    error('dm11 access failure')
-end
-parentDir = fullfile(archDir,'Data_pez3000');
-analysisDir = fullfile(dm11Dir,'Data_pez3000_analyzed');
+[~,localUserName] = dos('echo %USERNAME%');
+localUserName = localUserName(1:end-1);
+repositoryName = 'pezAnalysisRepository';
+repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
+fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
+parentDir = fullfile(fileDir,'Data_pez3000');
 
 strParts = strsplit(vidName,'_');
 runDir = [strParts{1} '_' strParts{2} '_' strParts{3}];
@@ -156,7 +140,11 @@ for iterR = 1:rowCt
         montyFrm(:,1:3) = 50;
         montyFrm(:,end-2:end) = 50;
         
-        montyFrm(topS(1)-1:topS(1)+1,:) = 30;
+        try
+            montyFrm(topS(1)-1:topS(1)+1,:) = 30;
+        catch
+            montyFrm(1:topS(1)+1,:) = 30;
+        end
         
         montyIm(rowRef,colRef) = montyFrm;
         frmRef{baseRef} = masterFrmRefs(montyRefs(baseRef));

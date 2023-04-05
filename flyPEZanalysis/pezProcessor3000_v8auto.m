@@ -37,28 +37,10 @@ set(0,'showhiddenhandles','on')
 delete(get(0,'children'))
 housekeepingDir = fullfile(fileDir,'Pez3000_Gui_folder','defaults_and_housekeeping_variables');
 analysisDir = fullfile(fileDir,'Data_pez3000_analyzed');
-[~,localUserName] = dos('echo %USERNAME%');
-localUserName = localUserName(1:end-1);
-repositoryName = 'pezAnalysisRepository';
-repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
-subfun_dir = fullfile(repositoryDir,'pezProc_subfunctions');
-saved_var_dir = fullfile(repositoryDir,'pezProc_saved_variables');
-assessment_dir = fullfile(repositoryDir,'file_assessment_and_manipulation');
-addpath(repositoryDir,subfun_dir,saved_var_dir,assessment_dir)
-addpath(fullfile(repositoryDir,'Pez3000_Gui_folder','Matlab_functions','Support_Programs'))
 
 failure_path = fullfile(analysisDir,'errorLogs','pezProcessor300_v8auto_errorLog.txt');
 
-[~,localUserName] = dos('echo %USERNAME%');
-localUserName = localUserName(1:end-1);
-repositoryName = 'pezAnalysisRepository';
-repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
-subfun_dir = fullfile(repositoryDir,'pezProc_subfunctions');
-saved_var_dir = fullfile(repositoryDir,'pezProc_saved_variables');
-addpath(subfun_dir,saved_var_dir)
-addpath(fullfile(repositoryDir,'Pez3000_Gui_folder','Matlab_functions','Support_Programs'))
-
-listSavePath = 'Z:\pez3000_variables\analysisVariables\videoList.mat';
+listSavePath = fullfile(fileDir,'pez3000_variables\analysisVariables\videoList.mat');
 if exist(listSavePath,'file')
     delete(listSavePath)%%%%%% comment out to keep saved list
 end
@@ -81,6 +63,9 @@ else
     videoList = cell(exptCt,1);
     for iterE = 1:exptCt
         exptID = exptIDlist{iterE};
+%         if contains(exptID, '0243000017061061')
+%             keyboard
+%         end
         assessmentPath = fullfile(analysisDir,exptID,[exptID '_rawDataAssessment.mat']);
         if exist(assessmentPath,'file') == 2
             try
@@ -191,11 +176,7 @@ if exptCt > 0
                 errTally(iterG,:) = {ME.stack(end-1).name ME.stack(end-1).line exptID};
             end
         end
-        try
-            vids2track_APT(exptID)
-        catch
-            warning('error adding following experiment ID to APT tracking list')
-        end
+        
         disp(exptID)
     end
     pez3000_statusAssessment_v2(exptIDlist)

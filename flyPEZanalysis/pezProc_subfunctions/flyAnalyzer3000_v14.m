@@ -28,8 +28,13 @@ if ~exist('debug','var')
     debug = 0;
 end
 %%%% Establish data destination directory
-%analysisDir = fullfile('\\tier2','card','Data_pez3000_analyzed');
-analysisDir = fullfile('\\DM11','cardlab','Data_pez3000_analyzed');
+[~,localUserName] = dos('echo %USERNAME%');
+localUserName = localUserName(1:end-1);
+repositoryName = 'pezAnalysisRepository';
+repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
+fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
+
+analysisDir = fullfile(fileDir,'Data_pez3000_analyzed');
 expt_results_dir = fullfile(analysisDir,exptID);
 analyzer_summary_dir = [expt_results_dir filesep exptID '_' analyzer_name '_visualMontage'];
 if isdir(analyzer_summary_dir) == 0, mkdir(analyzer_summary_dir),end

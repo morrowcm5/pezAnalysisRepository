@@ -20,8 +20,13 @@ if isempty(mfilename) || nargin == 0
 end
 
 %%%% Establish data destination directory
-%analysisDir = fullfile('\\tier2','card','Data_pez3000_analyzed');
-analysisDir = fullfile('\\DM11','cardlab','Data_pez3000_analyzed');
+[~,localUserName] = dos('echo %USERNAME%');
+localUserName = localUserName(1:end-1);
+repositoryName = 'pezAnalysisRepository';
+repositoryDir = fullfile('C:','Users',localUserName,'Documents',repositoryName);
+fileDir = fscanf(fopen(fullfile(repositoryDir,'flyPEZanalysis','pezFilePath.txt')),'%s');
+
+analysisDir = fullfile(fileDir,'Data_pez3000_analyzed');
 expt_results_dir = fullfile(analysisDir,exptID);
 graphTablePath = fullfile(expt_results_dir,[exptID '_dataForVisualization.mat']);
 % if ~exist(graphTablePath,'file')
@@ -69,7 +74,7 @@ else
 end
 
 %%%%% Load manual jump direction table
-manJumpDirTable = load(fullfile('\\DM11','cardlab','Jump_Angle_Tracking','Escape_Angle_Data.mat'));
+manJumpDirTable = load(fullfile(fileDir,'Jump_Angle_Tracking','Escape_Angle_Data.mat'));
 manJumpDirTable = manJumpDirTable.all_save_data;
 %%%%% Load assessment table
 assessmentPath = fullfile(expt_results_dir,[exptID '_rawDataAssessment.mat']);

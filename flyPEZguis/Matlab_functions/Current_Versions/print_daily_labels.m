@@ -272,7 +272,9 @@ file_path = fullfile(fileDir,'Data_pez3000_analyzed');
         try
             new_food_var = cellfun(@(x,y) sprintf('%s -- Foilded :: %s',x,y),filtered_data.Food_Type,filtered_data.Foiled,'uniformoutput',false);
         catch
-             new_food_var = arrayfun(@(x,y) sprintf('%s -- Foilded :: %s',x,y),filtered_data.Food_Type,filtered_data.Foiled,'uniformoutput',false);
+             new_food_var = sprintf('%s -- Foilded :: %s',filtered_data.Food_Type,filtered_data.Foiled);
+        
+            %new_food_var = arrayfun(@(x,y) sprintf('%s -- Foilded :: %s',x,y),filtered_data.Food_Type,filtered_data.Foiled,'uniformoutput',false);
         end
         filtered_data = filtered_data(:,ismember( fieldnames(sample_data),collection_list));        
         
@@ -581,8 +583,8 @@ file_path = fullfile(fileDir,'Data_pez3000_analyzed');
         end
         
         port = 9100;
-       % ip = '10.103.40.85';
-       ip = '129.236.162.177';
+%        ip = '10.103.40.85';
+       ip = '129.236.161.087';
         jobj = jtcp('request',ip,port,'serialize',false);
         msgCount = numel(print_str);
         for iterPrint = 1:msgCount

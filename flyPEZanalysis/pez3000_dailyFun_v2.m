@@ -13,6 +13,12 @@ clear all
 %     exit
 % end
 
+% Uncomment next three lines to update last date analyzed
+% load('Z:\Pez3000_Gui_folder\defaults_and_housekeeping_variables\lastDateAssessed_curator.mat')
+% dateFolderStr = '20221230';
+% save('Z:\Pez3000_Gui_folder\defaults_and_housekeeping_variables\lastDateAssessed_curator.mat','dateFolderStr')
+
+
 [~,localUserName] = dos('echo %USERNAME%');
 localUserName = localUserName(1:end-1);
 repositoryName = 'pezAnalysisRepository';
@@ -39,7 +45,7 @@ disp('Finishing tasks')
 pez3000_posthoc_corrections
 makeExcelTable_v2
 
-disp('Updating APT Tracking List')
-vids2track_APT
+%disp('Updating APT Tracking List')
+% vids2track_APT uncomment when APT pipeline is set up at columbia
 
 %exit
